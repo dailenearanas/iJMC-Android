@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">iJMC</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="navigation_items">
+        <item>About</item>
+        <item>Developers</item>
+        <item>Update</item>
+        <item>Help</item>
+    </string-array>
+    
+    <string-array name="main_menu_titles">
+        <item>JMC Profile</item>
+        <item>Vision, Mission, Goals</item>
+        <item>Admin Officials</item>
+        <item>Faculty Members</item>
+        <item>SSG</item>
+        <item>JMC Hymn</item>
+        <item>Departments</item>
+        <item>Others</item>
+    </string-array>
+
+</resources>
