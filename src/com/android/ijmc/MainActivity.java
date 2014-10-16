@@ -1,7 +1,9 @@
 package com.android.ijmc;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -9,11 +11,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.android.ijmc.config.Config;
 import com.android.ijmc.fragments.MainMenuFragment;
 import com.android.ijmc.fragments.NavigationDrawerFragment;
 
+@SuppressLint("NewApi")
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -28,10 +30,12 @@ public class MainActivity extends ActionBarActivity implements
 	private CharSequence mTitle;
 	
 	private SharedPreferences sp;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		sp = getSharedPreferences(Config.SHA_NAME, MODE_PRIVATE);
 		
 		if(!sp.getBoolean(Config.SHA_LOGGED_IN, false)){

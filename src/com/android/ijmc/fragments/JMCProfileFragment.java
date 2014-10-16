@@ -19,6 +19,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.ijmc.R;
 
@@ -38,13 +39,20 @@ public class JMCProfileFragment extends Fragment{
 		// TODO Auto-generated method stub
 		if(view == null){
 			view = inflater.inflate(R.layout.fragment_jmcprofile, container, false);
+			
 			ListView listView = (ListView)view.findViewById(R.id.jmcContent);
+			
 			ViewGroup header = (ViewGroup)inflater.inflate(R.layout.fragment_jmcprofile_header, listView, false);
+			
 			final ImageView badge = (ImageView)header.findViewById(R.id.sectionBadge);
+			
+			TextView sectionName = (TextView)header.findViewById(R.id.sectionTitle);
+			sectionName.setText("JMC Profile");
+			
 			listView.addHeaderView(header, null, false);
 			List<String> items = new ArrayList<String>();
-			for(int i=0;i<100;i++){
-				items.add(i+"");
+			for(int i=0;i<1;i++){
+				items.add(getActivity().getString(R.string.jmc_content));
 			}
 			listView.setAdapter(new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, items));
 			listView.setOnScrollListener(new OnScrollListener() {
@@ -68,7 +76,7 @@ public class JMCProfileFragment extends Fragment{
 					view.getLocalVisibleRect(rect);
 					if(lastTopValueAssigned != rect.top){
 						lastTopValueAssigned = rect.top;
-						view.setY((float)(rect.top/2.2));
+						view.setY((float)(rect.top/2.5));
 					}
 				}
 			});
