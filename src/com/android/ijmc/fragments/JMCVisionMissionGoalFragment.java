@@ -21,43 +21,46 @@ import android.widget.TextView;
 
 import com.android.ijmc.R;
 import com.android.ijmc.adapters.JMCProfileListAdapter;
+import com.android.ijmc.adapters.JMCVisionMissionGoalListAdapter;
 import com.android.ijmc.helpers.DatabaseHandler;
 import com.android.ijmc.helpers.Queries;
 import com.android.ijmc.models.ContentModel;
 
-public class JMCProfileFragment extends Fragment{
+public class JMCVisionMissionGoalFragment extends Fragment{
 
-	Context context;
 	View view;
-	ArrayList<ContentModel> jmcProfileItems;
+	ArrayList<ContentModel> jmcVMGItems;
+	Context context;
 	private int lastTopValueAssigned = 0;
-	public JMCProfileFragment() {
+	
+	public JMCVisionMissionGoalFragment() {
 		// TODO Auto-generated constructor stub
 		this.context = getActivity();
-		
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		if(view == null){
+		if(view == null) {
 			view = inflater.inflate(R.layout.fragment_common_parallax, container, false);
 			ListView listView = (ListView)view.findViewById(R.id.listContent);
 			ViewGroup header = (ViewGroup)inflater.inflate(R.layout.fragment_jmcprofile_header, listView, false);
 			
 			TextView sectionName = (TextView)header.findViewById(R.id.sectionTitle);
-			sectionName.setText("JMC Profile");
+			sectionName.setText("Vision Mission & Goal");
 			
 			final ImageView sectionBadge = (ImageView)header.findViewById(R.id.sectionBadge);
-			sectionBadge.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.jmc_banner));
+			sectionBadge.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.jmc_vmg));
 			
 			listView.addHeaderView(header, null, false);
 			
 			DatabaseHandler handler = new DatabaseHandler(getActivity());
 			SQLiteDatabase sqliteDb = handler.getReadableDatabase();
 			
-			jmcProfileItems = Queries.getJMCProf(sqliteDb, handler);
-			JMCProfileListAdapter adapter = new JMCProfileListAdapter(getActivity(), jmcProfileItems);
+			jmcVMGItems = Queries.getVMG(sqliteDb, handler);
+			
+			JMCVisionMissionGoalListAdapter adapter = new JMCVisionMissionGoalListAdapter(getActivity(), jmcVMGItems);
 			listView.setAdapter(adapter);
 			listView.setOnScrollListener(new OnScrollListener() {
 				
@@ -84,10 +87,12 @@ public class JMCProfileFragment extends Fragment{
 					}
 				}
 			});
+			/*DatabaseHandler handler = new DatabaseHandler(getActivity());
+			SQLiteDatabase sqliteDb = handler.getReadableDatabase();*/
 		}
 		return view;
 	}
-
+	
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

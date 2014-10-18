@@ -10,7 +10,8 @@
         android:id="@+id/menuBadge"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:src="@drawable/ic_launcher"/>
+        android:src="@drawable/ic_launcher"
+        android:contentDescription="@string/app_name"/>
     
     <TextView 
         android:id="@+id/menuTitle"

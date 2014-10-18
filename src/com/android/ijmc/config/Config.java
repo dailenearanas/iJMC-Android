@@ -7,7 +7,19 @@ public class Config {
     public Config() {
         
     }
+    
+    public static String HOST_NAME = "http://192.168.43.74";
 
+    public static String BASE_URL = HOST_NAME + "/iJMC-WebApp/public";
+
+    public static String JSON_URL = HOST_NAME + "/ijmc3/public/jsonlisting";
+    
+    public static String JSON_REQUEST_URL = HOST_NAME + "/ijmc3/public/jsonrequest";
+    
+    public static String IMAGE_BASE_URL = HOST_NAME + "/ijmc3/public/faculty_image";
+    
+
+    
     public static String FACULTY_TABLE = "faculties";
 
     public static String STUDENT_TABLE = "students";
@@ -16,23 +28,15 @@ public class Config {
 
     public static String DEPARTMENT_TABLE = "departments";
 
-    public static String BASE_URL = "http://192.168.56.1/iJMC-WebApp/public";
-
-//    public static String JSON_URL = "http://192.168.43.74/iJMC-WebApp/public/jsonlisting";
-
-    public static String JSON_URL = "http://192.168.43.74/ijmc3/public/jsonlisting";
-    
-    public static String JSON_REQUEST_URL = "http://192.168.43.74/ijmc3/public/jsonrequest";
-
     public static String CONTENT_JSON = "contentlist.json";
 
     public static String DEPARTMENT_JSON = "departmentlist.json";
 
     public static String STUDENT_JSON = "studentlist.json";
     
-    public static String STUDENT_VERIFY_JSON = "studentverify.json";
+    public static String STUDENT_CONFIRM_JSON = "studentverify.json";
     
-    public static String FACULTY_VERIFY_JSON = "facultyverify.json";
+    public static String FACULTY_CONFIRM_JSON = "facultyverify.json";
 
     public String jmcProfile;
 
@@ -58,12 +62,16 @@ public class Config {
     
     public static String SHA_USR_POS_ID = "USR_POS_ID";
     
+    public static String SHA_USR_IMAGE_FILE = "USR_IMAGE_FILE";
+    
     public static String SHA_USR_TYPE = "USR_TYPE";
     
     public static String SHA_LOGGED_IN = "USR_LOGIN_FLAG";
 
     
-    //CONTENT TABLE TAGS
+  //------START----------------JSON AND DATABASE TAGS---------------------------
+    
+  //CONTENT TAGS
     public static final String TAG_CONTENT_ID = "id";
 
     public static final String TAG_CONTENT_TYPE = "content_type";
@@ -71,7 +79,7 @@ public class Config {
     public static final String TAG_CONTENT_BODY = "content_body";
 
     
-    //FACULTY TABLE TAGS
+  //FACULTY TAGS
     public static final String TAG_FACULTY_ID = "fc_idn";
 
     public static final String TAG_FACULTY_FNAME = "fc_name";
@@ -91,15 +99,18 @@ public class Config {
     public static final String TAG_FACULTY_POSITION = "pos";
 
     
-    //DEPARTMENT TABLE TAGS
+  //DEPARTMENT TAGS
     public static final String TAG_DEPT_ID = "id";
 
     public static final String TAG_DEPT_TITLE = "dept_title";
 
     public static final String TAG_DEPT_DESC = "dept_desc";
+    
+    
+  //------END------------------JSON AND DATABASE TAGS---------------------------
 
     
-    // - - - - - - - METHODS - - - - - - - 
+  //---------------METHODS-------------- 
     public static ArrayList<String> getJsonUrls()
     {
         ArrayList<String> jsonUrls = new ArrayList<String>();

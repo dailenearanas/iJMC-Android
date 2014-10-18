@@ -1,5 +1,7 @@
 package com.android.ijmc;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,25 +9,26 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.ijmc.config.Config;
 import com.android.ijmc.helpers.ServiceHandler;
+import com.android.ijmc.services.ContentGrabberService;
 import com.android.ijmc.utilities.Utilities;
 
 public class LoginActivity extends Activity implements OnClickListener{
@@ -33,6 +36,9 @@ public class LoginActivity extends Activity implements OnClickListener{
 	ServiceHandler serviceHandler;
 	SharedPreferences sp;
 	SharedPreferences.Editor spEditor;
+	ResponseReceiver responseReceiver;
+	
+	ProgressDialog prepareDialog;
 	
 	//1 = STUDENT, DEFAULT;
 	//2 = FACULTY;
@@ -48,12 +54,27 @@ public class LoginActivity extends Activity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
+		IntentFilter filter = new IntentFilter(ResponseReceiver.ACTION_RESPONSE);
+		filter.addCategory(Intent.CATEGORY_DEFAULT);
+		responseReceiver = new ResponseReceiver();
+		registerReceiver(responseReceiver, filter);
+		
 		sp = getSharedPreferences(Config.SHA_NAME, MODE_PRIVATE);
 		Button btnRegister = (Button)findViewById(R.id.btnRegister);
 		btnRegister.setOnClickListener(this);
 		
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+		
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		unregisterReceiver(responseReceiver);
 	}
 
 	@Override
@@ -70,24 +91,25 @@ public class LoginActivity extends Activity implements OnClickListener{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		AlertDialog dialog = builder.create();
 		
-		dialog.setTitle("Login");
-		dialog.setIcon(getResources().getDrawable(R.drawable.ic_launcher));
-		
 		View view = createLoginView();
-		final EditText idField = (EditText)view.findViewById(11);
-		
+		dialog.setView(view);
+		final EditText idField = (EditText)view.findViewById(R.id.idField);
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.setCancelable(false);
 		dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Login", new AlertDialog.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
 				String requestURL = "";
+				Log.e("REQUEST", (idField.getText().toString().split("-"))[0].length()+"");
 				if((idField.getText().toString().split("-"))[0].length() == 2){
-					requestURL = Config.JSON_REQUEST_URL + "/" + Config.FACULTY_VERIFY_JSON + "?id=" + idField.getText();
+					requestURL = Config.JSON_REQUEST_URL + "/" + Config.FACULTY_CONFIRM_JSON + "?id=" + idField.getText();
 					flagUserType = 2;
 				} else {
-					requestURL = Config.JSON_REQUEST_URL + "/" + Config.STUDENT_VERIFY_JSON + "?id=" + idField.getText();
+					requestURL = Config.JSON_REQUEST_URL + "/" + Config.STUDENT_CONFIRM_JSON + "?id=" + idField.getText();
 				}
+				Log.e("requestURL", requestURL);
 				
 				LoginAsyncTask login = new LoginAsyncTask(LoginActivity.this, dialog);
 				login.execute(requestURL);
@@ -101,24 +123,12 @@ public class LoginActivity extends Activity implements OnClickListener{
 				dialog.dismiss();
 			}
 		});
-		dialog.setView(view);
 		dialog.show();
 	}
 	
 	private View createLoginView(){
-		LinearLayout baseLayout = new LinearLayout(this);
-		baseLayout.setOrientation(LinearLayout.VERTICAL);
-		EditText idField = new EditText(this);
-		idField.setId(11);
-		TextView label = new TextView(this);
-		label.setId(12);
-		
-		label.setText("ID Number: ");
-		label.setTextColor(Color.parseColor("#555555"));
-		
-		baseLayout.addView(label);
-		baseLayout.addView(idField);
-		
+		LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View baseLayout = inflater.inflate(R.layout.activity_login_view, null);
 		return baseLayout;
 	}
 	
@@ -150,6 +160,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 		spEditor.putString(Config.SHA_USR_SUFFIX, jsonObject.getString("fc_suffix"));
 		spEditor.putString(Config.SHA_USR_DEPT_ID, jsonObject.getString("dept_id"));
 		spEditor.putString(Config.SHA_USR_POS_ID, jsonObject.getString("pos"));
+		spEditor.putString(Config.SHA_USR_IMAGE_FILE, jsonObject.getString("image_path"));
 		spEditor.putString(Config.SHA_USR_TYPE, "Faculty");
 		spEditor.putBoolean(Config.SHA_LOGGED_IN, true);
 		
@@ -171,6 +182,11 @@ public class LoginActivity extends Activity implements OnClickListener{
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
+			
+			prepareDialog = new ProgressDialog(context);
+			prepareDialog.setIndeterminate(true);
+			prepareDialog.setMessage("Preparing...");
+			
 			progressDialog = new ProgressDialog(this.context);
 			progressDialog.setIndeterminate(true);
 			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -202,12 +218,17 @@ public class LoginActivity extends Activity implements OnClickListener{
 					} else {
 						setPreferenceForFaculty(jsonObject);
 					}
+					
 					progressDialog.dismiss();
 					dialog.dismiss();
 					
-					Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-					startActivity(intent);
-					finish();
+					prepareDialog.show();
+					Intent contentGrabber = new Intent(LoginActivity.this, ContentGrabberService.class);
+					ArrayList<String> urls = new ArrayList<String>();
+					urls.add(Config.JSON_URL + "/" + Config.CONTENT_JSON);
+					urls.add(Config.JSON_URL + "/" + Config.DEPARTMENT_JSON);
+					contentGrabber.putExtra(ContentGrabberService.PARAM_SRC, urls);
+					startService(contentGrabber);
 					
 				} else {
 					Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_LONG).show();
@@ -217,6 +238,20 @@ public class LoginActivity extends Activity implements OnClickListener{
 				// TODO Auto-generated catch block
 				Log.e("JSONException LoginActivity.java", e.getMessage().toString());
 			}
+		}
+		
+	}
+	
+	public class ResponseReceiver extends BroadcastReceiver{
+		public static final String ACTION_RESPONSE = "com.android.ijmc.intent.action.PREPARE_DONE";
+		
+		@Override
+		public void onReceive(Context arg0, Intent arg1) {
+			// TODO Auto-generated method stub
+			prepareDialog.dismiss();
+			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+			startActivity(intent);
+			finish();
 		}
 		
 	}

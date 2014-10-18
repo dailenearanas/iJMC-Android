@@ -71,6 +71,19 @@ public class MainMenuFragment extends Fragment{
 					case 1:
 						imageView.setImageResource(R.drawable.vmg);
 						subView.setBackgroundColor(Color.parseColor("#fc87b1"));
+						imageView.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								JMCVisionMissionGoalFragment jmcVMG = new JMCVisionMissionGoalFragment();
+								transaction = getFragmentManager().beginTransaction();
+								transaction.replace(R.id.baseMainLayout, jmcVMG);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK);
+								transaction.addToBackStack(null);
+								transaction.commit();
+							}
+						});
 						break;
 					case 2:
 						imageView.setImageResource(R.drawable.admin);

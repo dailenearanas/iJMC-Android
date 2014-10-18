@@ -311,7 +311,6 @@ public class Queries {
 
         ContentValues values = new ContentValues();
         values.put("dept_id", department.getDeptId());
-        Log.e("DEPT", values.getAsString("dept_id"));
         values.put("dept_title", department.getDeptTitle());
         values.put("dept_desc", department.getDeptDesc());
 
@@ -320,7 +319,6 @@ public class Queries {
     }
 
     public static void TruncateTables(SQLiteDatabase db, DatabaseHandler dbHandler) {
-        Log.e("TRUNCATE TABLES", "");
 
         db = dbHandler.getWritableDatabase();
 
@@ -360,6 +358,7 @@ public class Queries {
                 "image_path TEXT, " +
                 "dept_id TEXT, " +
                 "pos TEXT ) ");
-
+        
+        db.close();
     }
 }

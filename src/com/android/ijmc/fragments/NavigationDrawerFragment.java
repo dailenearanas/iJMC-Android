@@ -1,9 +1,27 @@
 package com.android.ijmc.fragments;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -12,6 +30,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +40,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +49,9 @@ import com.android.ijmc.LoginActivity;
 import com.android.ijmc.R;
 import com.android.ijmc.adapters.NavigationDrawerMenuListAdapter;
 import com.android.ijmc.config.Config;
+import com.android.ijmc.helpers.DatabaseHandler;
+import com.android.ijmc.helpers.Queries;
+import com.android.ijmc.utilities.Utilities;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -36,7 +60,7 @@ import com.android.ijmc.config.Config;
  * > design guidelines</a> for a complete explanation of the behaviors
  * implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment implements OnClickListener{
 
 	/**
 	 * Remember the position of the selected item.
@@ -67,7 +91,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
 	private String[] menus;
-	
+
 	private SharedPreferences sp;
 
 	public NavigationDrawerFragment() {
@@ -82,7 +106,8 @@ public class NavigationDrawerFragment extends Fragment {
 		// drawer. See PREF_USER_LEARNED_DRAWER for details.
 		SharedPreferences spLocal = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		mUserLearnedDrawer = spLocal.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+		mUserLearnedDrawer = spLocal
+				.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
 		if (savedInstanceState != null) {
 			mCurrentSelectedPosition = savedInstanceState
@@ -92,8 +117,9 @@ public class NavigationDrawerFragment extends Fragment {
 
 		// Select either the default item (0) or the last selected item.
 		selectItem(mCurrentSelectedPosition);
-		
-		sp = getActivity().getSharedPreferences(Config.SHA_NAME, Activity.MODE_PRIVATE);
+
+		sp = getActivity().getSharedPreferences(Config.SHA_NAME,
+				Activity.MODE_PRIVATE);
 	}
 
 	@Override
@@ -107,25 +133,43 @@ public class NavigationDrawerFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		this.menus = getResources().getStringArray(R.array.navigation_items);
-		View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 		
-		//TODO START set user profile summary for drawer
-		TextView userName = (TextView)view.findViewById(R.id.userName);
-		TextView userTitle = (TextView)view.findViewById(R.id.userTitle);
-		Button logout = (Button)view.findViewById(R.id.button1);
+		this.menus = getResources().getStringArray(R.array.navigation_items);
+		View view = inflater.inflate(R.layout.fragment_navigation_drawer,
+				container, false);
+
+		// TODO START set user profile summary for drawer
+		TextView userName = (TextView) view.findViewById(R.id.userName);
+		TextView userIDNumber = (TextView) view.findViewById(R.id.userTitle);
+		Button logout = (Button) view.findViewById(R.id.button1);
 		String fname = sp.getString(Config.SHA_USR_FNAME, "--");
 		String mname = sp.getString(Config.SHA_USR_MNAME, "--");
 		String lname = sp.getString(Config.SHA_USR_LNAME, "--");
 		String suffix = sp.getString(Config.SHA_USR_SUFFIX, "");
-		userName.setText(fname + " " + mname.charAt(0) + ". " + lname + " " + suffix);
-		userTitle.setText(sp.getString(Config.SHA_USR_TYPE, "Guest"));
+		userName.setText(fname + " " + mname + " "  + lname);
+		if(!suffix.equals("")) {
+			userName.setText(userName.getText() + " " + suffix);
+		}
+		userIDNumber.setText(sp.getString(Config.SHA_USR_ID,""));
+
+		File image = new File(getActivity().getCacheDir()+"/images/"+sp.getString(Config.SHA_USR_IMAGE_FILE, ""));
+		if(!image.exists()){
+			Log.e("IMAGEHOLDER", "no image " + image.getAbsolutePath() + " " + image.exists());
+			ProfileImageGrabber grabber = new ProfileImageGrabber(getActivity());
+			grabber.execute(sp.getString(Config.SHA_USR_IMAGE_FILE, ""));
+		} else {
+			Log.e("IMAGEHOLDER", "image here.");
+			ImageView imageHolder = (ImageView)view.findViewById(R.id.profileImageHolder);
+			imageHolder.setScaleType(ScaleType.FIT_CENTER);
+			imageHolder.setImageBitmap(Utilities.createRoundedMaskImage(getActivity(), sp.getString(Config.SHA_USR_IMAGE_FILE, "")));
+			imageHolder.invalidate();
+		}
 		
-		//TODO END set user profile summary for drawer
-		
-		NavigationDrawerMenuListAdapter navAdapter = new NavigationDrawerMenuListAdapter(getActivity(), this.menus);
-		
-		mDrawerListView = (ListView)view.findViewById(R.id.navListView);
+		// TODO END set user profile summary for drawer
+		NavigationDrawerMenuListAdapter navAdapter = new NavigationDrawerMenuListAdapter(
+				getActivity(), this.menus);
+
+		mDrawerListView = (ListView) view.findViewById(R.id.navListView);
 		mDrawerListView
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					@Override
@@ -136,21 +180,37 @@ public class NavigationDrawerFragment extends Fragment {
 				});
 		mDrawerListView.setAdapter(navAdapter);
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-		
-		logout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				SharedPreferences.Editor spEditor = sp.edit();
-				spEditor.clear();
-				spEditor.commit();
-				Intent intent = new Intent(getActivity(), LoginActivity.class);
-				startActivity(intent);
-				getActivity().finish();
-			}
-		});
+
+		logout.setOnClickListener(this);
 		return view;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch(v.getId()) {
+		case R.id.button1:
+			SharedPreferences.Editor spEditor = sp.edit();
+			spEditor.clear();
+			spEditor.commit();
+			
+			SharedPreferences spLocal = PreferenceManager.getDefaultSharedPreferences(getActivity());
+			SharedPreferences.Editor editor = spLocal.edit();
+			editor.putBoolean(PREF_USER_LEARNED_DRAWER, false);
+			editor.commit();
+			
+			File imageCache = new File(getActivity().getCacheDir() + "/images");
+			imageCache.delete();
+			
+			DatabaseHandler handler = new DatabaseHandler(getActivity());
+			SQLiteDatabase sqliteDb = null;
+			Queries.TruncateTables(sqliteDb, handler);
+			
+			Intent intent = new Intent(getActivity(), LoginActivity.class);
+			startActivity(intent);
+			getActivity().finish();
+		break;
+		}
 	}
 
 	public boolean isDrawerOpen() {
@@ -217,6 +277,7 @@ public class NavigationDrawerFragment extends Fragment {
 					// The user manually opened the drawer; store this flag to
 					// prevent auto-showing
 					// the navigation drawer automatically in the future.
+					
 					mUserLearnedDrawer = true;
 					SharedPreferences sp = PreferenceManager
 							.getDefaultSharedPreferences(getActivity());
@@ -309,11 +370,11 @@ public class NavigationDrawerFragment extends Fragment {
 			return true;
 		}
 
-		/*if (item.getItemId() == R.id.action_example) {
-			Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
-					.show();
-			return true;
-		}*/
+		/*
+		 * if (item.getItemId() == R.id.action_example) {
+		 * Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
+		 * .show(); return true; }
+		 */
 
 		return super.onOptionsItemSelected(item);
 	}
@@ -343,5 +404,73 @@ public class NavigationDrawerFragment extends Fragment {
 		 * Called when an item in the navigation drawer is selected.
 		 */
 		void onNavigationDrawerItemSelected(int position);
+	}
+
+	class ProfileImageGrabber extends AsyncTask<String, Void, Void> {
+		
+		Context context;
+		String imageName;
+		
+		public ProfileImageGrabber(Context context)
+		{
+			this.context = context;
+		}
+
+		@Override
+		protected Void doInBackground(String... arg0) {
+			// TODO Auto-generated method stub
+			int count;
+			try {
+				imageName = arg0[0];
+				URL url = new URL(Config.IMAGE_BASE_URL + "/" + arg0[0]);
+				Log.e("URL PATH", Config.IMAGE_BASE_URL + "/" + arg0[0]);
+				URLConnection connection = url.openConnection();
+				connection.connect();
+
+				InputStream in = new BufferedInputStream(url.openStream());
+
+				File imageCache = new File(getActivity().getCacheDir()
+						+ "/images");
+				imageCache.mkdir();
+
+				OutputStream out = new FileOutputStream(getActivity()
+						.getCacheDir() + "/images/" + arg0[0]);
+				
+				Log.e("IMAGE CACHE PATH", getActivity()
+						.getCacheDir() + "/images/" + arg0[0]);
+
+				byte data[] = new byte[2048];
+				while ((count = in.read(data)) != -1) {
+					out.write(data, 0, count);
+				}
+
+				out.flush();
+				out.close();
+				in.close();
+
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			TransitionDrawable td = new TransitionDrawable(new Drawable[] {
+				new ColorDrawable(Color.TRANSPARENT),
+						new BitmapDrawable(Utilities.createRoundedMaskImage(context, imageName))	
+			});
+			ImageView imageView = (ImageView)((Activity)this.context).findViewById(R.id.profileImageHolder);
+			imageView.setImageDrawable(td);
+			imageView.setScaleType(ScaleType.FIT_CENTER);
+			td.startTransition(3000);
+		}
 	}
 }

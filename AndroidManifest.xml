@@ -30,5 +30,9 @@
         <activity 
             android:name="com.android.ijmc.LoginActivity"
             android:screenOrientation="portrait"></activity>
+        
+        <service 
+            android:name="com.android.ijmc.services.ContentGrabberService"
+            android:label="contentGrabberService"></service>
     </application>
 </manifest>

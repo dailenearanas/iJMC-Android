@@ -1,9 +1,10 @@
 package com.android.ijmc;
 
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -11,9 +12,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.android.ijmc.config.Config;
 import com.android.ijmc.fragments.MainMenuFragment;
 import com.android.ijmc.fragments.NavigationDrawerFragment;
+import com.android.ijmc.services.ContentGrabberService;
 
 @SuppressLint("NewApi")
 public class MainActivity extends ActionBarActivity implements
