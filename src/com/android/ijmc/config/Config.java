@@ -10,7 +10,7 @@ public class Config {
     
     public static String HOST_NAME = "http://192.168.43.74";
 
-    public static String BASE_URL = HOST_NAME + "/iJMC-WebApp/public";
+    public static String BASE_URL = HOST_NAME + "/ijmc3/public";
 
     public static String JSON_URL = HOST_NAME + "/ijmc3/public/jsonlisting";
     

@@ -76,11 +76,13 @@ public class JMCProfileFragment extends Fragment{
 				
 				@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 				private void parallaxImage(View view){
+					if(Build.VERSION.SDK_INT > 10) {
 					Rect rect = new Rect();
-					view.getLocalVisibleRect(rect);
-					if(lastTopValueAssigned != rect.top){
-						lastTopValueAssigned = rect.top;
-						view.setY((float)(rect.top/2.5));
+						view.getLocalVisibleRect(rect);
+						if(lastTopValueAssigned != rect.top){
+							lastTopValueAssigned = rect.top;
+							view.setY((float)(rect.top/2.5));
+						}
 					}
 				}
 			});

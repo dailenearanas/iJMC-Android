@@ -199,7 +199,12 @@ public class LoginActivity extends Activity implements OnClickListener{
 			// TODO Auto-generated method stub
 			
 			String response = LoginActivity.this.serviceHandler.makeServiceCall(params[0], 1);
-			Log.e("LOGIN RESPONSE", response);
+			
+			if(response == null) {
+				Log.e("LOGIN RESPONSE", "Error in Response");
+			} else {
+				Log.e("LOGIN RESPONSE", response.toString());
+			}
 			
 			return response;
 		}
@@ -208,35 +213,39 @@ public class LoginActivity extends Activity implements OnClickListener{
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			
-			try {
-				JSONArray jsonArray = Utilities.makeJSONArrayFromString(result);
-				if(jsonArray.length() > 0){
-					JSONObject jsonObject = (JSONObject) jsonArray.get(0);
-					if(flagUserType == 1){
-						setPreferenceForStudent(jsonObject);
+			if(result != null) {
+				try {
+					JSONArray jsonArray = Utilities.makeJSONArrayFromString(result);
+					if(jsonArray.length() > 0){
+						JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+						if(flagUserType == 1){
+							setPreferenceForStudent(jsonObject);
+						} else {
+							setPreferenceForFaculty(jsonObject);
+						}
+						
+						progressDialog.dismiss();
+						dialog.dismiss();
+						
+						prepareDialog.show();
+						Intent contentGrabber = new Intent(LoginActivity.this, ContentGrabberService.class);
+						ArrayList<String> urls = new ArrayList<String>();
+						urls.add(Config.JSON_URL + "/" + Config.CONTENT_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.DEPARTMENT_JSON);
+						contentGrabber.putExtra(ContentGrabberService.PARAM_SRC, urls);
+						startService(contentGrabber);
+						
 					} else {
-						setPreferenceForFaculty(jsonObject);
+						Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_LONG).show();
+						progressDialog.dismiss();
 					}
-					
-					progressDialog.dismiss();
-					dialog.dismiss();
-					
-					prepareDialog.show();
-					Intent contentGrabber = new Intent(LoginActivity.this, ContentGrabberService.class);
-					ArrayList<String> urls = new ArrayList<String>();
-					urls.add(Config.JSON_URL + "/" + Config.CONTENT_JSON);
-					urls.add(Config.JSON_URL + "/" + Config.DEPARTMENT_JSON);
-					contentGrabber.putExtra(ContentGrabberService.PARAM_SRC, urls);
-					startService(contentGrabber);
-					
-				} else {
-					Toast.makeText(getApplicationContext(), "Invalid ID", Toast.LENGTH_LONG).show();
-					progressDialog.dismiss();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					Log.e("JSONException LoginActivity.java", e.getMessage().toString());
 				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				Log.e("JSONException LoginActivity.java", e.getMessage().toString());
+			} else {
+				progressDialog.dismiss();
+				Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
 			}
 		}
 		
