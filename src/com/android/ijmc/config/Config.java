@@ -27,12 +27,26 @@ public class Config {
     public static String CONTENT_TABLE = "contents";
 
     public static String DEPARTMENT_TABLE = "departments";
-
+    
+    
+    //JSON LISTINGS 
     public static String CONTENT_JSON = "contentlist.json";
 
     public static String DEPARTMENT_JSON = "departmentlist.json";
 
     public static String STUDENT_JSON = "studentlist.json";
+    
+    public static String COURSE_JSON = "courselist.json";
+    
+    public static String FACULTY_JSON = "facultylist.json";
+    
+    public static String POSITION_JSON = "positionlist.json";
+    
+    public static String SSG_JSON = "ssglist.json";
+    
+    public static String SEALS_JSON = "jmcseallist.json";
+    
+    
     
     public static String STUDENT_CONFIRM_JSON = "studentverify.json";
     
@@ -114,9 +128,14 @@ public class Config {
     public static ArrayList<String> getJsonUrls()
     {
         ArrayList<String> jsonUrls = new ArrayList<String>();
-        jsonUrls.add(JSON_URL + "/" + CONTENT_JSON);
-        jsonUrls.add(JSON_URL + "/" + DEPARTMENT_JSON);
-        jsonUrls.add(JSON_URL + "/" + STUDENT_JSON);
+        jsonUrls.add(JSON_URL + "/" + CONTENT_JSON);//with model
+        jsonUrls.add(JSON_URL + "/" + DEPARTMENT_JSON);//with model
+        jsonUrls.add(JSON_URL + "/" + STUDENT_JSON);//with model
+        jsonUrls.add(JSON_URL + "/" + COURSE_JSON);
+        jsonUrls.add(JSON_URL + "/" + FACULTY_JSON);//with model
+        jsonUrls.add(JSON_URL + "/" + POSITION_JSON);//with model
+        jsonUrls.add(JSON_URL + "/" + SSG_JSON);
+        jsonUrls.add(JSON_URL + "/" + SEALS_JSON);
         return jsonUrls;
     }
 }
