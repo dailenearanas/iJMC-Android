@@ -113,13 +113,26 @@ public class MainMenuFragment extends Fragment{
 					case 5:
 						imageView.setImageResource(R.drawable.hymn);
 						subView.setBackgroundColor(Color.parseColor("#fe4386"));
+						imageView.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								JMCHymnFragment jmcHymnFragment = new JMCHymnFragment();
+								transaction = getFragmentManager().beginTransaction();
+								transaction.replace(R.id.baseMainLayout, jmcHymnFragment);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK);
+								transaction.addToBackStack(null);
+								transaction.commit();
+							}
+						});
 						break;
 					case 6:
 						imageView.setImageResource(R.drawable.dept);
 						subView.setBackgroundColor(Color.parseColor("#fe3d82"));
 						break;
 					case 7:
-						imageView.setImageResource(R.drawable.others);
+						imageView.setImageResource(R.drawable.seal);
 						subView.setBackgroundColor(Color.parseColor("#fe327b"));
 						break;
 					}

@@ -18,14 +18,14 @@
     </string-array>
     
     <string-array name="main_menu_titles">
-        <item>JMC Profile</item>
+        <item>School Profile</item>
         <item>Vision, Mission, Goals</item>
         <item>Admin Officials</item>
         <item>Faculty Members</item>
         <item>SSG</item>
         <item>JMC Hymn</item>
         <item>Departments</item>
-        <item>Others</item>
+        <item>School Seal</item>
     </string-array>
 
 </resources>

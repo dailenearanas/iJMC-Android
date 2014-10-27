@@ -16,6 +16,7 @@ import com.android.ijmc.helpers.DatabaseHandler;
 import com.android.ijmc.helpers.Queries;
 import com.android.ijmc.helpers.ServiceHandler;
 import com.android.ijmc.models.ContentModel;
+import com.android.ijmc.models.CourseModel;
 import com.android.ijmc.models.DepartmentModel;
 
 public class ContentGrabberService extends IntentService{
@@ -39,7 +40,9 @@ public class ContentGrabberService extends IntentService{
 				forContent(response);
 			} else if(sourceFile.equals(Config.DEPARTMENT_JSON.substring(0, Config.DEPARTMENT_JSON.length()-5))) {
 				forDepartment(response);
-			}
+			} else if(sourceFile.equals(Config.COURSE_JSON.substring(0, Config.COURSE_JSON.length()-5))) {
+				forCourse(response);
+			} 
 		}
 		
 		Intent broadcastIntent = new Intent();
@@ -89,6 +92,30 @@ public class ContentGrabberService extends IntentService{
 			ArrayList<ContentModel> contents = Queries.getContents(sqliteDB, handler);
 			for(ContentModel item: contents) {
 				Log.e("CONTENT", item.getContentType());
+			}
+		} catch (Exception e) {
+			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+		}
+	}
+	
+	private void forCourse(String response){
+		try {
+			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
+			JSONArray jsonArray = new JSONArray(response);
+			for(int i=0;i<jsonArray.length();i++) {
+				JSONObject obj = jsonArray.getJSONObject(i);
+				CourseModel course = new CourseModel();
+				course.courseId = obj.getString("crs_id");
+				course.courseTitle = obj.getString("crs_title");
+				course.courseDesc = obj.getString("crs_desc");
+				course.deptId = obj.getInt("dept_id");
+				Queries.InsertCourse(sqliteDB, handler, course);
+			}
+			
+			ArrayList<CourseModel> course = Queries.getCourses(sqliteDB, handler);
+			for(CourseModel item: course) {
+				Log.e("CONTENT", item.getCourseTitle());
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());

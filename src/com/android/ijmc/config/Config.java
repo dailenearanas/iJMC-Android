@@ -8,15 +8,17 @@ public class Config {
         
     }
     
-    public static String HOST_NAME = "http://192.168.43.74";
-
-    public static String BASE_URL = HOST_NAME + "/ijmc3/public";
-
-    public static String JSON_URL = HOST_NAME + "/ijmc3/public/jsonlisting";
+    public static String HOST_NAME = "http://192.168.205.1";
     
-    public static String JSON_REQUEST_URL = HOST_NAME + "/ijmc3/public/jsonrequest";
+    public static String FOLDER_NAME = "ijmc3";
+
+    public static String BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public";
+
+    public static String JSON_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jsonlisting";
     
-    public static String IMAGE_BASE_URL = HOST_NAME + "/ijmc3/public/faculty_image";
+    public static String JSON_REQUEST_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jsonrequest";
+    
+    public static String IMAGE_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/faculty_image";
     
 
     
@@ -27,6 +29,16 @@ public class Config {
     public static String CONTENT_TABLE = "contents";
 
     public static String DEPARTMENT_TABLE = "departments";
+    
+    public static String SEAL_TABLE = "jmcseals";
+    
+    public static String COURSE_TABLE = "courses";
+    
+    public static String POSITION_TABLE = "positions";
+    
+    public static String SSG_TABLE = "ssgofficers";
+    
+    public static String MUSIC_TABLE = "musics";
     
     
     //JSON LISTINGS 
@@ -45,6 +57,8 @@ public class Config {
     public static String SSG_JSON = "ssglist.json";
     
     public static String SEALS_JSON = "jmcseallist.json";
+    
+    public static String MUSIC_JSON = "musiclist.json";
     
     
     
