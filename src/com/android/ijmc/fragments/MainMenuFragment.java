@@ -92,6 +92,19 @@ public class MainMenuFragment extends Fragment{
 					case 3:
 						imageView.setImageResource(R.drawable.faculty);
 						subView.setBackgroundColor(Color.parseColor("#fd659c"));
+						imageView.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								FacultyPagerFragment jmcFaculty = new FacultyPagerFragment();
+								transaction = getFragmentManager().beginTransaction();
+								transaction.replace(R.id.baseMainLayout, jmcFaculty);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK);
+								transaction.addToBackStack(null);
+								transaction.commit();
+							}
+						});
 						break;
 					case 4:
 						imageView.setImageResource(R.drawable.ssg);
