@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import com.android.ijmc.config.Config;
 import com.android.ijmc.fragments.MainMenuFragment;
 import com.android.ijmc.fragments.NavigationDrawerFragment;
-import com.android.ijmc.services.ContentGrabberService;
 
 @SuppressLint("NewApi")
 public class MainActivity extends ActionBarActivity implements

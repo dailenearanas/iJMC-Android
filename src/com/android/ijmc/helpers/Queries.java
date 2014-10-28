@@ -8,8 +8,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.android.ijmc.models.ContentModel;
+import com.android.ijmc.models.CourseModel;
 import com.android.ijmc.models.DepartmentModel;
 import com.android.ijmc.models.FacultyModel;
+import com.android.ijmc.models.MusicModel;
+import com.android.ijmc.models.OtherModel;
+import com.android.ijmc.models.PositionModel;
+import com.android.ijmc.models.SSGModel;
+import com.android.ijmc.models.SealsModel;
 import com.android.ijmc.models.StudentModel;
 
 /**
@@ -31,7 +37,10 @@ public class Queries {
                 studentId = mCursor.getString(1);
             } while (mCursor.moveToNext());
         }
-
+        
+        mCursor.close();
+        dbHandler.close();
+        
         return studentId;
     }
 
@@ -195,7 +204,7 @@ public class Queries {
         FacultyModel facultyModel;
 
         sqLiteDb = dbHandler.getReadableDatabase();
-        Cursor mCursor = sqLiteDb.rawQuery("SELECT * FROM `faculties`", null);
+        Cursor mCursor = sqLiteDb.rawQuery("SELECT * FROM " + DatabaseHandler.facultyTbl.toString(), null);
 
         mCursor.moveToFirst();
         if (!mCursor.isAfterLast())
@@ -246,6 +255,187 @@ public class Queries {
                 departmentModel.deptDesc = mCursor.getString(2);
 
                 models.add(departmentModel);
+
+            } while (mCursor.moveToNext());
+        }
+
+        mCursor.close();
+        dbHandler.close();
+
+        return models;
+    }
+    
+    public static ArrayList<CourseModel> getCourses(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler)
+    {
+        ArrayList<CourseModel> models = new ArrayList<CourseModel>();
+        CourseModel courseModel;
+
+        sqliteDB = dbHandler.getReadableDatabase();
+        Cursor mCursor = sqliteDB.rawQuery("SELECT * from " + DatabaseHandler.courseTbl.toString(), null);
+
+        mCursor.moveToFirst();
+        if (!mCursor.isAfterLast())
+        {
+            do
+            {
+            	courseModel = new CourseModel();
+
+            	courseModel.courseId = mCursor.getString(1);
+            	courseModel.courseTitle = mCursor.getString(2);
+            	courseModel.courseDesc = mCursor.getString(3);
+            	courseModel.deptId = mCursor.getInt(4);
+
+                models.add(courseModel);
+
+            } while (mCursor.moveToNext());
+        }
+
+        mCursor.close();
+        dbHandler.close();
+
+        return models;
+    }
+    
+    public static ArrayList<PositionModel> getPositions(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler)
+    {
+        ArrayList<PositionModel> models = new ArrayList<PositionModel>();
+        PositionModel positionModel;
+
+        sqliteDB = dbHandler.getReadableDatabase();
+        Cursor mCursor = sqliteDB.rawQuery("SELECT * from " + DatabaseHandler.positionTbl.toString(), null);
+
+        mCursor.moveToFirst();
+        if (!mCursor.isAfterLast())
+        {
+            do
+            {
+            	positionModel = new PositionModel();
+            	
+            	positionModel.positionId = mCursor.getString(1);
+            	positionModel.positionTitle = mCursor.getString(2);        
+
+                models.add(positionModel);
+
+            } while (mCursor.moveToNext());
+        }
+
+        mCursor.close();
+        dbHandler.close();
+
+        return models;
+    }
+    
+    public static ArrayList<SSGModel> getSSG(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler)
+    {
+        ArrayList<SSGModel> models = new ArrayList<SSGModel>();
+        SSGModel ssgModel;
+
+        sqliteDB = dbHandler.getReadableDatabase();
+        Cursor mCursor = sqliteDB.rawQuery("SELECT * from " + DatabaseHandler.ssgTbl.toString(), null);
+
+        mCursor.moveToFirst();
+        if (!mCursor.isAfterLast())
+        {
+            do
+            {
+            	ssgModel = new SSGModel();
+            	
+            	ssgModel.ssgFname = mCursor.getString(1);
+            	ssgModel.ssgMname = mCursor.getString(2);
+            	ssgModel.ssgLname = mCursor.getString(3);
+            	ssgModel.ssgImage = mCursor.getString(4);
+            	ssgModel.ssgLevel = mCursor.getString(5);
+            	ssgModel.ssgCrsId = mCursor.getInt(6);
+            	ssgModel.ssgPosId = mCursor.getInt(7);
+
+                models.add(ssgModel);
+
+            } while (mCursor.moveToNext());
+        }
+
+        mCursor.close();
+        dbHandler.close();
+
+        return models;
+    }
+    
+    public static ArrayList<SealsModel> getSeals(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler)
+    {
+        ArrayList<SealsModel> models = new ArrayList<SealsModel>();
+        SealsModel sealsModel;
+
+        sqliteDB = dbHandler.getReadableDatabase();
+        Cursor mCursor = sqliteDB.rawQuery("SELECT * from " + DatabaseHandler.sealTbl.toString(), null);
+
+        mCursor.moveToFirst();
+        if (!mCursor.isAfterLast())
+        {
+            do
+            {
+            	sealsModel = new SealsModel();
+
+            	sealsModel.sealImg = mCursor.getString(1);
+            	sealsModel.sealName = mCursor.getString(2);
+            	sealsModel.sealDesc = mCursor.getString(3);
+
+                models.add(sealsModel);
+
+            } while (mCursor.moveToNext());
+        }
+
+        mCursor.close();
+        dbHandler.close();
+
+        return models;
+    }
+    
+    public static ArrayList<MusicModel> getMusic(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler)
+    {
+        ArrayList<MusicModel> models = new ArrayList<MusicModel>();
+        MusicModel musicModel;
+
+        sqliteDB = dbHandler.getReadableDatabase();
+        Cursor mCursor = sqliteDB.rawQuery("SELECT * from " + DatabaseHandler.musicTbl.toString(), null);
+
+        mCursor.moveToFirst();
+        if (!mCursor.isAfterLast())
+        {
+            do
+            {
+            	musicModel = new MusicModel();
+            	musicModel.musicName = mCursor.getString(1);
+            	musicModel.musicPath = mCursor.getString(2);
+
+                models.add(musicModel);
+
+            } while (mCursor.moveToNext());
+        }
+
+        mCursor.close();
+        dbHandler.close();
+
+        return models;
+    }
+    
+    public static ArrayList<OtherModel> getOther(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler)
+    {
+        ArrayList<OtherModel> models = new ArrayList<OtherModel>();
+        OtherModel otherModel;
+
+        sqliteDB = dbHandler.getReadableDatabase();
+        Cursor mCursor = sqliteDB.rawQuery("SELECT * from " + DatabaseHandler.otherTbl.toString(), null);
+
+        mCursor.moveToFirst();
+        if (!mCursor.isAfterLast())
+        {
+            do
+            {
+            	otherModel = new OtherModel();
+            	otherModel.otherTitle = mCursor.getString(1);
+            	otherModel.otherBody = mCursor.getString(2);
+            	otherModel.otherUsrId = mCursor.getString(3);
+
+                models.add(otherModel);
 
             } while (mCursor.moveToNext());
         }
@@ -317,6 +507,86 @@ public class Queries {
         sqLiteDB.insert(DatabaseHandler.departmentsTbl, null, values);
         sqLiteDB.close();
     }
+    
+    public static void InsertCourse(SQLiteDatabase sqLiteDB, DatabaseHandler dbHandler, CourseModel course) {
+        Log.e("INSERTING COURSES", "##COMMENT##");
+        sqLiteDB = dbHandler.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("crs_id", course.getCourseId());
+        values.put("crs_title", course.getCourseTitle());
+        values.put("crs_desc", course.getCourseDesc());
+
+        sqLiteDB.insert(DatabaseHandler.courseTbl, null, values);
+        sqLiteDB.close();
+    }
+    
+    public static void InsertPosition(SQLiteDatabase sqLiteDB, DatabaseHandler dbHandler, PositionModel position) {
+        Log.e("INSERTING POSITION", "##COMMENT##");
+        sqLiteDB = dbHandler.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("pos_id", position.getPositionId());
+        values.put("pos_title", position.getPositionTitle());        
+
+        sqLiteDB.insert(DatabaseHandler.positionTbl, null, values);
+        sqLiteDB.close();
+    }
+    
+    public static void InsertSSG(SQLiteDatabase sqLiteDB, DatabaseHandler dbHandler, SSGModel ssg) {
+        Log.e("INSERTING SSG", "##COMMENT##");
+        sqLiteDB = dbHandler.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("firstname", ssg.getSsgFname());
+        values.put("middlename", ssg.getSsgMname());
+        values.put("lastname", ssg.getSsgLname());
+        values.put("img_path", ssg.getSsgImage());
+        values.put("level", ssg.getSsgLevel());
+        values.put("crs_id", ssg.getSsgCrsId());
+        values.put("pos_id", ssg.getSsgPosId());
+
+        sqLiteDB.insert(DatabaseHandler.ssgTbl, null, values);
+        sqLiteDB.close();
+    }
+    
+    public static void InsertSeal(SQLiteDatabase sqLiteDB, DatabaseHandler dbHandler, SealsModel seal) {
+        Log.e("INSERTING SEAL", "##COMMENT##");
+        sqLiteDB = dbHandler.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("img_path", seal.getSealImg());
+        values.put("js_name", seal.getSealName());
+        values.put("js_desc", seal.getSealDesc());
+
+        sqLiteDB.insert(DatabaseHandler.sealTbl, null, values);
+        sqLiteDB.close();
+    }
+    
+    public static void InsertMusic(SQLiteDatabase sqLiteDB, DatabaseHandler dbHandler, MusicModel music) {
+        Log.e("INSERTING MUSIC", "##COMMENT##");
+        sqLiteDB = dbHandler.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("music_name", music.getMusicName());
+        values.put("music_path", music.getMusicPath());        
+
+        sqLiteDB.insert(DatabaseHandler.musicTbl, null, values);
+        sqLiteDB.close();
+    }
+    
+    public static void InsertOther(SQLiteDatabase sqLiteDB, DatabaseHandler dbHandler, OtherModel other) {
+        Log.e("INSERTING OTHER CONTENTS", "##COMMENT##");
+        sqLiteDB = dbHandler.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("o_title", other.getOtherTitle());
+        values.put("o_body", other.getOtherBody());
+        values.put("user_id", other.getOtherUsrId());
+
+        sqLiteDB.insert(DatabaseHandler.otherTbl, null, values);
+        sqLiteDB.close();
+    }
 
     public static void TruncateTables(SQLiteDatabase db, DatabaseHandler dbHandler) {
 
@@ -326,6 +596,12 @@ public class Queries {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.departmentsTbl);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.studentsTbl);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.facultyTbl);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.courseTbl);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.positionTbl);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.ssgTbl);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.sealTbl);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.musicTbl);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseHandler.otherTbl);
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ DatabaseHandler.contentsTbl +" " +
                 "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -358,6 +634,45 @@ public class Queries {
                 "image_path TEXT, " +
                 "dept_id TEXT, " +
                 "pos TEXT ) ");
+        
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+ DatabaseHandler.sealTbl +" " +
+                "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "img_path TEXT, " +
+                "js_name TEXT, " +               
+                "js_desc TEXT ) ");
+        
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+ DatabaseHandler.courseTbl +" " +
+                "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "crs_id INTEGER, " +
+                "crs_title TEXT, " +
+                "crs_desc TEXT, " +               
+                "dept_id INTEGER ) ");
+        
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+ DatabaseHandler.positionTbl +" " +
+                "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "pos_id INTEGER, " +             
+                "pos_title TEXT ) ");
+        
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+ DatabaseHandler.ssgTbl +" " +
+                "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "firstname TEXT, " +
+                "middlename TEXT, " +
+                "lastname TEXT, " +
+                "img_path TEXT, " +
+                "level TEXT, " +  
+                "crs_id INTEGER, " +             
+                "pos_id INTEGER ) ");
+        
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+ DatabaseHandler.musicTbl +" " +
+                "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "music_name TEXT, " +             
+                "music_path TEXT ) ");
+        
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+ DatabaseHandler.otherTbl +" " +
+                "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "o_title TEXT, " +
+                "o_body TEXT, " +  
+                "user_id INTEGER ) ");
         
         db.close();
     }

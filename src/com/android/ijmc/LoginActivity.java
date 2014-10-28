@@ -232,6 +232,14 @@ public class LoginActivity extends Activity implements OnClickListener{
 						ArrayList<String> urls = new ArrayList<String>();
 						urls.add(Config.JSON_URL + "/" + Config.CONTENT_JSON);
 						urls.add(Config.JSON_URL + "/" + Config.DEPARTMENT_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.COURSE_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.FACULTY_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.POSITION_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.SSG_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.SEALS_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.MUSIC_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.OTHER_JSON);
+						
 						contentGrabber.putExtra(ContentGrabberService.PARAM_SRC, urls);
 						startService(contentGrabber);
 						

@@ -8,15 +8,17 @@ public class Config {
         
     }
     
-    public static String HOST_NAME = "http://192.168.43.74";
-
-    public static String BASE_URL = HOST_NAME + "/ijmc3/public";
-
-    public static String JSON_URL = HOST_NAME + "/ijmc3/public/jsonlisting";
+    public static String HOST_NAME = "http://192.168.2.105";
     
-    public static String JSON_REQUEST_URL = HOST_NAME + "/ijmc3/public/jsonrequest";
+    public static String FOLDER_NAME = "iJMC-WebApp";
+
+    public static String BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public";
+
+    public static String JSON_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jsonlisting";
     
-    public static String IMAGE_BASE_URL = HOST_NAME + "/ijmc3/public/faculty_image";
+    public static String JSON_REQUEST_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jsonrequest";
+    
+    public static String IMAGE_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/faculty_image";
     
 
     
@@ -27,6 +29,18 @@ public class Config {
     public static String CONTENT_TABLE = "contents";
 
     public static String DEPARTMENT_TABLE = "departments";
+    
+    public static String SEAL_TABLE = "jmcseals";
+    
+    public static String COURSE_TABLE = "courses";
+    
+    public static String POSITION_TABLE = "positions";
+    
+    public static String SSG_TABLE = "ssgofficers";
+    
+    public static String MUSIC_TABLE = "musics";
+    
+    public static String OTHER_TABLE = "others";
     
     
     //JSON LISTINGS 
@@ -45,6 +59,10 @@ public class Config {
     public static String SSG_JSON = "ssglist.json";
     
     public static String SEALS_JSON = "jmcseallist.json";
+    
+    public static String MUSIC_JSON = "musiclist.json";
+    
+    public static String OTHER_JSON = "otherlist.json";
     
     
     
@@ -120,6 +138,54 @@ public class Config {
 
     public static final String TAG_DEPT_DESC = "dept_desc";
     
+   //COURSE TAGS
+    public static final String TAG_COURSE_ID = "id";
+    
+    public static final String TAG_COURSE_TITLE = "crs_title";
+    
+    public static final String TAG_COURSE_DESC = "crs_desc";
+    
+    public static final String TAG_COURSE_DEPT_ID = "dept_id";
+    
+    //POSITION TAGS
+    public static final String TAG_POSITION_ID = "id";
+    
+    public static final String TAG_POSITION_TITLE = "pos_title";
+    
+    //SSG OFFICER TAGS
+    public static final String TAG_SSG_FNAME = "firstname";
+    
+    public static final String TAG_SSG_MNAME = "middlename";
+    
+    public static final String TAG_SSG_LNAME = "lastname";
+    
+    public static final String TAG_SSG_IMAGE = "img_path";
+    
+    public static final String TAG_SSG_LEVEL = "level";
+    
+    public static final String TAG_SSG_CRS_ID = "crs_id";
+    
+    public static final String TAG_SSG_POS_ID = "pos_id";
+    
+    //SEAL TAGS
+    public static final String TAG_SEAL_IMAGE = "img_path";
+    
+    public static final String TAG_SEAL_NAME = "js_name";
+    
+    public static final String TAG_SEAL_DESC = "js_desc";
+    
+    //MUSIC TAGS
+    public static final String TAG_MUSIC_NAME = "music_name";
+    
+    public static final String TAG_MUSIC_PATH = "music_path";
+    
+    //OTHER TAGS
+    public static final String TAG_OTHER_TITLE = "o_title";
+    
+    public static final String TAG_OTHER_BODY = "o_body";
+    
+    public static final String TAG_OTHER_USR_ID = "user_id";
+    
     
   //------END------------------JSON AND DATABASE TAGS---------------------------
 
@@ -131,11 +197,11 @@ public class Config {
         jsonUrls.add(JSON_URL + "/" + CONTENT_JSON);//with model
         jsonUrls.add(JSON_URL + "/" + DEPARTMENT_JSON);//with model
         jsonUrls.add(JSON_URL + "/" + STUDENT_JSON);//with model
-        jsonUrls.add(JSON_URL + "/" + COURSE_JSON);
+        jsonUrls.add(JSON_URL + "/" + COURSE_JSON);//with model
         jsonUrls.add(JSON_URL + "/" + FACULTY_JSON);//with model
         jsonUrls.add(JSON_URL + "/" + POSITION_JSON);//with model
-        jsonUrls.add(JSON_URL + "/" + SSG_JSON);
-        jsonUrls.add(JSON_URL + "/" + SEALS_JSON);
+        jsonUrls.add(JSON_URL + "/" + SSG_JSON);//with model
+        jsonUrls.add(JSON_URL + "/" + SEALS_JSON);//with model
         return jsonUrls;
     }
 }
