@@ -25,6 +25,10 @@ import android.widget.LinearLayout;
 import com.android.ijmc.R;
 
 public class Utilities {
+	
+	static int CONST_IMAGE_HEIGHT_DST = 480;
+	
+	static int CONST_IMAGE_THUMB_HEIGHT_DST = 240;
 
 	public Utilities() {
 		// TODO Auto-generated constructor stub
@@ -43,7 +47,7 @@ public class Utilities {
 			Log.e("CHECK IMAGE", "isFile");
 			myPic = BitmapFactory.decodeFile(context.getCacheDir() + "/images/" + filename);
 		}
-//		myPic = Bitmap.createScaledBitmap(myPic, 256, 256, false);
+		myPic = createScaledBitmapRatio(myPic, CONST_IMAGE_HEIGHT_DST);
 		Bitmap mask = BitmapFactory.decodeResource(context.getResources(), R.drawable.oval);
 		Bitmap maskMono = Bitmap.createBitmap(mask.getHeight(), mask.getWidth(), Config.ARGB_8888);
 		Canvas canvas = new Canvas(maskMono);
@@ -54,6 +58,44 @@ public class Utilities {
 		paint.setXfermode(null);
 		
 		return maskMono;
+	}
+	
+	public static Bitmap createRoundedMaskImageThumb(Context context, String filename){
+		
+		File checkImage = new File(filename);
+		Bitmap myPic = BitmapFactory.decodeResource(context.getResources(), R.drawable.image_holder);
+		if(checkImage.isFile()) {
+			myPic = BitmapFactory.decodeFile(filename);
+		}
+		myPic = createScaledBitmapRatio(myPic, CONST_IMAGE_THUMB_HEIGHT_DST);
+		Bitmap mask = BitmapFactory.decodeResource(context.getResources(), R.drawable.oval_thumb);
+		Bitmap maskMono = Bitmap.createBitmap(mask.getHeight(), mask.getWidth(), Config.ARGB_8888);
+		Canvas canvas = new Canvas(maskMono);
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+		canvas.drawBitmap(myPic, 0, 0, null);
+		canvas.drawBitmap(mask, 0, 0, paint);
+		paint.setXfermode(null);
+		
+		return maskMono;
+	}
+	
+	
+	private static Bitmap createScaledBitmapRatio(Bitmap bmp, int desiredSize) {
+		Bitmap scaledBitmap;
+		
+		float valuePercentage = ((float)desiredSize / (float)bmp.getWidth())*100;
+		float distanceRatio = (valuePercentage - 100)/100;
+		
+		float newW = bmp.getWidth() * distanceRatio;
+		newW = bmp.getWidth() + newW;
+		
+		float newH = bmp.getHeight() * distanceRatio;
+		newH = bmp.getHeight() + newH;
+		
+		scaledBitmap = Bitmap.createScaledBitmap(bmp, (int)newW, (int)newH, false);
+		
+		return scaledBitmap;
 	}
 	
 	public static View createViewForContextMenu(Context context, String flag, String content) {

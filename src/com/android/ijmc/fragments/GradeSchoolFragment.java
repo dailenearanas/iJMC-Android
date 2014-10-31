@@ -14,6 +14,11 @@ public class GradeSchoolFragment extends Fragment{
 	public GradeSchoolFragment() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public static Fragment newInstance() {
+		GradeSchoolFragment fragment = new GradeSchoolFragment();
+		return fragment;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,

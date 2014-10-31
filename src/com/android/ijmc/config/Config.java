@@ -2,15 +2,17 @@ package com.android.ijmc.config;
 
 import java.util.ArrayList;
 
+import android.os.Environment;
+
 public class Config {
 
     public Config() {
         
     }
     
-    public static String HOST_NAME = "http://192.168.2.105";
+    public static String HOST_NAME = "http://192.168.43.74";
     
-    public static String FOLDER_NAME = "iJMC-WebApp";
+    public static String FOLDER_NAME = "ijmc-temp";
 
     public static String BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public";
 
@@ -18,7 +20,11 @@ public class Config {
     
     public static String JSON_REQUEST_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jsonrequest";
     
-    public static String IMAGE_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/faculty_image";
+    public static String IMAGE_FACULTY_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/faculty_image";
+    
+    public static String IMAGE_STUDENT_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/student_img";
+    
+    public static String EXTERNAL_FOLDER = Environment.getExternalStorageDirectory() + "/.ijmc";
     
 
     

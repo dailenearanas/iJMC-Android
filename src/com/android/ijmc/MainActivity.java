@@ -1,6 +1,6 @@
 package com.android.ijmc;
 
-import java.util.ArrayList;
+import java.io.File;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -39,6 +39,9 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		
 		sp = getSharedPreferences(Config.SHA_NAME, MODE_PRIVATE);
+		
+		File file = new File(Config.EXTERNAL_FOLDER);
+		file.mkdirs();
 		
 		if(!sp.getBoolean(Config.SHA_LOGGED_IN, false)){
 			Intent intent = new Intent(MainActivity.this, LoginActivity.class);

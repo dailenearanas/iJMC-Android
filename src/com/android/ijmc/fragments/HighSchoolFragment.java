@@ -14,6 +14,11 @@ public class HighSchoolFragment extends Fragment{
 	public HighSchoolFragment() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	public static Fragment newInstance() {
+		HighSchoolFragment fragment = new HighSchoolFragment();
+		return fragment;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,

@@ -422,8 +422,14 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 			int count;
 			try {
 				imageName = arg0[0];
-				URL url = new URL(Config.IMAGE_BASE_URL + "/" + arg0[0]);
-				Log.e("URL PATH", Config.IMAGE_BASE_URL + "/" + arg0[0]);
+				URL url = null;
+				if(sp.getString(Config.SHA_USR_TYPE, "").equals("Student")) {
+					url = new URL(Config.IMAGE_STUDENT_BASE_URL + "/" + arg0[0]);
+					Log.e("URL PATH", Config.IMAGE_STUDENT_BASE_URL + "/" + arg0[0]);
+				} else {
+					url = new URL(Config.IMAGE_FACULTY_BASE_URL + "/" + arg0[0]);
+					Log.e("URL PATH", Config.IMAGE_FACULTY_BASE_URL + "/" + arg0[0]);
+				}
 				URLConnection connection = url.openConnection();
 				connection.connect();
 

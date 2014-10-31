@@ -1,6 +1,15 @@
 package com.android.ijmc.services;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,6 +59,7 @@ public class ContentGrabberService extends IntentService{
 				forCourse(response);
 			} else if(sourceFile.equals(Config.FACULTY_JSON.substring(0, Config.FACULTY_JSON.length()-5))) {
 				forFaculty(response);
+				obtainFacultyImages();
 			} else if(sourceFile.equals(Config.POSITION_JSON.substring(0, Config.POSITION_JSON.length()-5))) {
 				forPosition(response);
 			} else if(sourceFile.equals(Config.SSG_JSON.substring(0, Config.SSG_JSON.length()-5))) {
@@ -168,6 +178,42 @@ public class ContentGrabberService extends IntentService{
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+		}
+	}
+	
+	private void obtainFacultyImages() {
+		DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+		SQLiteDatabase sqliteDB = handler.getWritableDatabase();
+		List<String> fimages = Queries.getFacultyImages(sqliteDB, handler);
+		
+		
+		
+		for(String image : fimages) {
+			try {
+				int count = 0;
+				Log.e("SOURCE", Config.IMAGE_FACULTY_BASE_URL + "/" + image);
+				URL url = new URL(Config.IMAGE_FACULTY_BASE_URL + "/" + image);
+				
+				URLConnection connection = url.openConnection();
+				connection.connect();
+				
+				InputStream in = new BufferedInputStream(url.openStream());
+				
+				File imageDir = new File(Config.EXTERNAL_FOLDER + "/faculty_images");
+				imageDir.mkdirs();
+				
+				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER + "/faculty_images/" + image);
+				byte[] data = new byte[1024];
+				while((count = in.read(data)) != -1) {
+					out.write(data,0,count);
+				}
+				out.flush();
+				out.close();
+				in.close();
+				
+			} catch(IOException e) {
+				Log.e("FACULTY IMAGES DOWNLOAD ERROR", e.getMessage().toString());
+			}
 		}
 	}
 	

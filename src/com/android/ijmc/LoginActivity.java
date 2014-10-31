@@ -144,6 +144,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 		spEditor.putString(Config.SHA_USR_MNAME, jsonObject.getString("stud_mname"));
 		spEditor.putString(Config.SHA_USR_LNAME, jsonObject.getString("stud_lname"));
 		spEditor.putString(Config.SHA_USR_DEPT_ID, jsonObject.getString("dept_id"));
+		spEditor.putString(Config.SHA_USR_IMAGE_FILE, jsonObject.getString("image_path"));
 		spEditor.putString(Config.SHA_USR_TYPE, "Student");
 		spEditor.putBoolean(Config.SHA_LOGGED_IN, true);
 		spEditor.commit();
