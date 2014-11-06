@@ -346,15 +346,8 @@ public class ContentGrabberService extends IntentService{
 			in.close();
 			
 		} catch (MalformedURLException e) {
-<<<<<<< HEAD
 			e.printStackTrace();
 		} catch (IOException e) {
-=======
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
->>>>>>> aranas-dei
 			e.printStackTrace();
 		}
 	}
