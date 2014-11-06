@@ -20,7 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.ijmc.R;
-import com.android.ijmc.adapters.JMCProfileListAdapter;
+import com.android.ijmc.adapters.ProfileListAdapter;
 import com.android.ijmc.helpers.DatabaseHandler;
 import com.android.ijmc.helpers.Queries;
 import com.android.ijmc.models.ContentModel;
@@ -57,7 +57,7 @@ public class JMCProfileFragment extends Fragment{
 			SQLiteDatabase sqliteDb = handler.getReadableDatabase();
 			
 			jmcProfileItems = Queries.getJMCProf(sqliteDb, handler);
-			JMCProfileListAdapter adapter = new JMCProfileListAdapter(getActivity(), jmcProfileItems);
+			ProfileListAdapter adapter = new ProfileListAdapter(getActivity(), jmcProfileItems);
 			listView.setAdapter(adapter);
 			listView.setOnScrollListener(new OnScrollListener() {
 				

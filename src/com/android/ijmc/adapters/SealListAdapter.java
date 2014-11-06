@@ -2,6 +2,10 @@ package com.android.ijmc.adapters;
 
 import java.util.ArrayList;
 
+import com.android.ijmc.R;
+import com.android.ijmc.adapters.SealListAdapter.ViewHolder;
+import com.android.ijmc.models.ContentModel;
+
 import android.content.Context;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -13,15 +17,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
-import com.android.ijmc.R;
-import com.android.ijmc.adapters.JMCHymnListAdapter.ViewHolder;
-import com.android.ijmc.models.ContentModel;
-
-public class JMCHymnListAdapter extends BaseAdapter {
+public class SealListAdapter extends BaseAdapter{
 	ArrayList<ContentModel> items;
 	Context context;
 	LayoutInflater inflater;
-	public JMCHymnListAdapter(Context context, ArrayList<ContentModel> items) {
+	public SealListAdapter(Context context, ArrayList<ContentModel> items) {
 		// TODO Auto-generated constructor stub
 		this.items = items;
 		this.context = context;

@@ -20,8 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.ijmc.R;
-import com.android.ijmc.adapters.JMCProfileListAdapter;
-import com.android.ijmc.adapters.JMCVisionMissionGoalListAdapter;
+import com.android.ijmc.adapters.ProfileListAdapter;
+import com.android.ijmc.adapters.VisionMissionGoalListAdapter;
 import com.android.ijmc.helpers.DatabaseHandler;
 import com.android.ijmc.helpers.Queries;
 import com.android.ijmc.models.ContentModel;
@@ -60,7 +60,7 @@ public class JMCVisionMissionGoalFragment extends Fragment{
 			
 			jmcVMGItems = Queries.getVMG(sqliteDb, handler);
 			
-			JMCVisionMissionGoalListAdapter adapter = new JMCVisionMissionGoalListAdapter(getActivity(), jmcVMGItems);
+			VisionMissionGoalListAdapter adapter = new VisionMissionGoalListAdapter(getActivity(), jmcVMGItems);
 			listView.setAdapter(adapter);
 			listView.setOnScrollListener(new OnScrollListener() {
 				

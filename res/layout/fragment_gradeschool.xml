@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#FFFFFF" >
     
-	<TextView 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fragment Grade School"
-        android:textColor="#000"/>
+	<ListView 
+        android:id="@+id/facultyGradeSchoolList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animationCache="false"
+	    android:scrollingCache="false"
+	    android:divider="#FFFFFF00"
+	    android:dividerHeight="0dp" />
     
 </LinearLayout>

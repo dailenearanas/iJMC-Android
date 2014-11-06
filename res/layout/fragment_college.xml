@@ -2,17 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <TextView 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fragment College"
-        android:textColor="#000"/>
+    android:orientation="vertical"
+    android:background="#FFFFFF" >
     
     <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView
 	    android:id="@+id/collegeFacultyList"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"/>
+	    android:layout_height="match_parent"
+	    android:animationCache="false"
+	    android:scrollingCache="false"
+	    android:divider="#FFFFFF00"
+	    android:dividerHeight="0dp"/>
 
 </LinearLayout>

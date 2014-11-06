@@ -2,10 +2,6 @@ package com.android.ijmc.adapters;
 
 import java.util.ArrayList;
 
-import com.android.ijmc.R;
-import com.android.ijmc.adapters.JMCSealListAdapter.ViewHolder;
-import com.android.ijmc.models.ContentModel;
-
 import android.content.Context;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -17,11 +13,15 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 
-public class JMCSealListAdapter extends BaseAdapter{
+import com.android.ijmc.R;
+import com.android.ijmc.models.ContentModel;
+
+public class ProfileListAdapter extends BaseAdapter{
+
 	ArrayList<ContentModel> items;
 	Context context;
 	LayoutInflater inflater;
-	public JMCSealListAdapter(Context context, ArrayList<ContentModel> items) {
+	public ProfileListAdapter(Context context, ArrayList<ContentModel> items) {
 		// TODO Auto-generated constructor stub
 		this.items = items;
 		this.context = context;
@@ -85,4 +85,5 @@ public class JMCSealListAdapter extends BaseAdapter{
 	static class ViewHolder{
 		TextView textView;
 	}
+
 }

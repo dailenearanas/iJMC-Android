@@ -6,39 +6,38 @@ import android.content.Context;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 
 import com.android.ijmc.R;
+import com.android.ijmc.adapters.HymnListAdapter.ViewHolder;
 import com.android.ijmc.models.ContentModel;
 
-public class JMCVisionMissionGoalListAdapter extends BaseAdapter{
-	
-	ArrayList<ContentModel> jmcVMGitems;
+public class HymnListAdapter extends BaseAdapter {
+	ArrayList<ContentModel> items;
 	Context context;
 	LayoutInflater inflater;
-
-	public JMCVisionMissionGoalListAdapter(Context context, ArrayList<ContentModel> jmcVMGitems) {
+	public HymnListAdapter(Context context, ArrayList<ContentModel> items) {
 		// TODO Auto-generated constructor stub
+		this.items = items;
 		this.context = context;
-		this.jmcVMGitems = jmcVMGitems;
-		this.inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return jmcVMGitems.size();
+		return items.size();
 	}
 
 	@Override
 	public ContentModel getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return jmcVMGitems.get(arg0);
+		return items.get(arg0);
 	}
 
 	@Override
@@ -48,40 +47,42 @@ public class JMCVisionMissionGoalListAdapter extends BaseAdapter{
 	}
 
 	@Override
+	public int getItemViewType(int position) {
+		// TODO Auto-generated method stub
+		return super.getItemViewType(position);
+	}
+
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		ViewHolder viewHolder;
+		
 		if(convertView == null) {
-			convertView = inflater.inflate(R.layout.listview_jmcvmg_view, parent, false);
+			convertView = inflater.inflate(R.layout.listview_jmcprofile_view, parent, false);
 			viewHolder = new ViewHolder();
-			viewHolder.header = (TextView)convertView.findViewById(R.id.header);
-			viewHolder.contentView = (TextView)convertView.findViewById(R.id.VMGContentText);
+			viewHolder.textView = (TextView)convertView.findViewById(R.id.profileContentText);
+			
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder)convertView.getTag();
 		}
 		
-		viewHolder.header.setText(jmcVMGitems.get(position).getContentType());
-		
-		final SpannableString spannableString = new SpannableString(jmcVMGitems.get(position).getContentBody());
+		final SpannableString spannableString = new SpannableString(items.get(position).getContentBody());
 		int x = 0;
-		for (int i = 0, ei = jmcVMGitems.get(position).getContentBody().length(); i < ei; i++) {
-		    char c = jmcVMGitems.get(position).getContentBody().charAt(i);
+		for (int i = 0, ei = items.get(position).getContentBody().length(); i < ei; i++) {
+		    char c = items.get(position).getContentBody().charAt(i);
 		    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
 		        x = i;
 		        break;
 		    }
 		}
 		spannableString.setSpan(new RelativeSizeSpan(3.0f), x, x + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		
-		viewHolder.contentView.setText(spannableString);
+		viewHolder.textView.setText(spannableString, BufferType.SPANNABLE);
 		
 		return convertView;
 	}
 	
 	static class ViewHolder{
-		TextView header;
-		TextView contentView;
+		TextView textView;
 	}
-
 }

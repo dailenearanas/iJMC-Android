@@ -20,6 +20,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     final static String positionTbl = Config.POSITION_TABLE;
     final static String ssgTbl = Config.SSG_TABLE;
     final static String musicTbl = Config.MUSIC_TABLE;
+    final static String otherTbl = Config.OTHER_TABLE;
 
     public DatabaseHandler(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -92,6 +93,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "music_name TEXT, " +             
                 "music_path TEXT ) ");
+        
+        db.execSQL("CREATE TABLE IF NOT EXISTS "+ otherTbl +" " +
+                "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "o_title TEXT, " +
+                "o_body TEXT, " +  
+                "user_id INTEGER ) ");
 	}
 
 	@Override
@@ -105,6 +112,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + positionTbl);
         db.execSQL("DROP TABLE IF EXISTS " + ssgTbl);
         db.execSQL("DROP TABLE IF EXISTS " + musicTbl);
+        db.execSQL("DROP TABLE IF EXISTS " + otherTbl);
 
 		onCreate(db);
 	}

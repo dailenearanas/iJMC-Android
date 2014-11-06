@@ -1,10 +1,12 @@
 package com.android.ijmc;
 
-import java.util.ArrayList;
+import java.io.File;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -16,7 +18,6 @@ import android.view.MenuItem;
 import com.android.ijmc.config.Config;
 import com.android.ijmc.fragments.MainMenuFragment;
 import com.android.ijmc.fragments.NavigationDrawerFragment;
-import com.android.ijmc.services.ContentGrabberService;
 
 @SuppressLint("NewApi")
 public class MainActivity extends ActionBarActivity implements
@@ -40,6 +41,9 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		
 		sp = getSharedPreferences(Config.SHA_NAME, MODE_PRIVATE);
+		
+		File file = new File(Config.EXTERNAL_FOLDER);
+		file.mkdirs();
 		
 		if(!sp.getBoolean(Config.SHA_LOGGED_IN, false)){
 			Intent intent = new Intent(MainActivity.this, LoginActivity.class);

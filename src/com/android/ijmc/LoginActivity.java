@@ -144,6 +144,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 		spEditor.putString(Config.SHA_USR_MNAME, jsonObject.getString("stud_mname"));
 		spEditor.putString(Config.SHA_USR_LNAME, jsonObject.getString("stud_lname"));
 		spEditor.putString(Config.SHA_USR_DEPT_ID, jsonObject.getString("dept_id"));
+		spEditor.putString(Config.SHA_USR_IMAGE_FILE, jsonObject.getString("image_path"));
 		spEditor.putString(Config.SHA_USR_TYPE, "Student");
 		spEditor.putBoolean(Config.SHA_LOGGED_IN, true);
 		spEditor.commit();
@@ -232,6 +233,14 @@ public class LoginActivity extends Activity implements OnClickListener{
 						ArrayList<String> urls = new ArrayList<String>();
 						urls.add(Config.JSON_URL + "/" + Config.CONTENT_JSON);
 						urls.add(Config.JSON_URL + "/" + Config.DEPARTMENT_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.COURSE_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.FACULTY_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.POSITION_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.SSG_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.SEALS_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.MUSIC_JSON);
+						urls.add(Config.JSON_URL + "/" + Config.OTHER_JSON);
+						
 						contentGrabber.putExtra(ContentGrabberService.PARAM_SRC, urls);
 						startService(contentGrabber);
 						

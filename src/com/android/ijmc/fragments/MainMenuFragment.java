@@ -62,7 +62,7 @@ public class MainMenuFragment extends Fragment{
 								JMCProfileFragment jmcProfile = new JMCProfileFragment();
 								transaction = getFragmentManager().beginTransaction();
 								transaction.replace(R.id.baseMainLayout, jmcProfile);
-								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 								transaction.addToBackStack(null);
 								transaction.commit();
 							}
@@ -79,7 +79,7 @@ public class MainMenuFragment extends Fragment{
 								JMCVisionMissionGoalFragment jmcVMG = new JMCVisionMissionGoalFragment();
 								transaction = getFragmentManager().beginTransaction();
 								transaction.replace(R.id.baseMainLayout, jmcVMG);
-								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 								transaction.addToBackStack(null);
 								transaction.commit();
 							}
@@ -100,7 +100,7 @@ public class MainMenuFragment extends Fragment{
 								FacultyPagerFragment jmcFaculty = new FacultyPagerFragment();
 								transaction = getFragmentManager().beginTransaction();
 								transaction.replace(R.id.baseMainLayout, jmcFaculty);
-								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 								transaction.addToBackStack(null);
 								transaction.commit();
 							}
@@ -121,7 +121,7 @@ public class MainMenuFragment extends Fragment{
 								JMCHymnFragment jmcHymnFragment = new JMCHymnFragment();
 								transaction = getFragmentManager().beginTransaction();
 								transaction.replace(R.id.baseMainLayout, jmcHymnFragment);
-								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 								transaction.addToBackStack(null);
 								transaction.commit();
 							}
