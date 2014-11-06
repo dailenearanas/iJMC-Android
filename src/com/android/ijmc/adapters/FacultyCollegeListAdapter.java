@@ -2,16 +2,19 @@ package com.android.ijmc.adapters;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.ijmc.R;
@@ -58,7 +61,7 @@ public class FacultyCollegeListAdapter extends BaseAdapter implements StickyList
 		final FacultyModel item = faculties.get(position);
 		if(convertView == null) {
 			holder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.fragment_college_listview_item, parent, false);
+			convertView = inflater.inflate(R.layout.fragment_faculty_listview_item, parent, false);
 			holder.facultyImage = (ImageView)convertView.findViewById(R.id.facultyThumb);
 			holder.facultyName = (TextView)convertView.findViewById(R.id.facultyName);
 			holder.facultyPosition = (TextView)convertView.findViewById(R.id.facultyPosition);
@@ -73,7 +76,8 @@ public class FacultyCollegeListAdapter extends BaseAdapter implements StickyList
 			protected Bitmap doInBackground(ViewHolder... params) {
 				// TODO Auto-generated method stub
 				v = params[0];
-				return Utilities.createRoundedMaskImageThumb(context, Config.EXTERNAL_FOLDER + "/faculty_images/" + item.getFacultyImagePath());
+				Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/" + item.getFacultyImagePath());
+				return Utilities.getRoundedRectBitmap(bmp, 100);
 			}
 
 			@Override
@@ -97,7 +101,8 @@ public class FacultyCollegeListAdapter extends BaseAdapter implements StickyList
 		if(convertView == null) {
 			holder = new HeaderViewHolder();
 			convertView = inflater.inflate(R.layout.fragment_college_headerview, parent, false);
-			holder.headerText = (TextView)convertView.findViewById(R.id.textView1);
+			holder.headerText = (TextView)convertView.findViewById(R.id.pageLabel);
+			holder.headerContainer = (LinearLayout)convertView.findViewById(R.id.headerContainer);
 			
 			convertView.setTag(holder);
 		} else {
@@ -118,6 +123,7 @@ public class FacultyCollegeListAdapter extends BaseAdapter implements StickyList
 	
 	static class HeaderViewHolder{
 		TextView headerText;
+		LinearLayout headerContainer;
 	}
 	
 	static class ViewHolder{

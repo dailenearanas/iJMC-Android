@@ -36,4 +36,10 @@ public class FacultyFragmentPagerAdapter extends FragmentStatePagerAdapter{
 		// TODO Auto-generated method stub
 		return PAGES;
 	}
+	
+	public String[] getTitles() {
+		return new String[]{"College Department","HighSchool Department", "GradeSchool Department"};
+	}
+	
+	
 }

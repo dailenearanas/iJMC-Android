@@ -1,18 +1,24 @@
 package com.android.ijmc.fragments;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.ijmc.R;
 import com.android.ijmc.adapters.FacultyFragmentPagerAdapter;
 
+@SuppressLint("NewApi")
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FacultyPagerFragment extends Fragment{
 
 	View view;
@@ -31,6 +37,26 @@ public class FacultyPagerFragment extends Fragment{
 		viewPager = (ViewPager)view.findViewById(R.id.facultyPager);
 		viewPagerAdapter = new FacultyFragmentPagerAdapter(getFragmentManager());
 		viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int arg0) {
+				// TODO Auto-generated method stub
+				getActivity().getActionBar().setTitle(Html.fromHtml("<i>" + viewPagerAdapter.getTitles()[arg0] + "</i>"));
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+			}
+		});
+		getActivity().getActionBar().setTitle(Html.fromHtml("<i>" + viewPagerAdapter.getTitles()[0] + "</i>"));
 		viewPager.setAdapter(viewPagerAdapter);
 		return view;
 	}
@@ -79,6 +105,13 @@ public class FacultyPagerFragment extends Fragment{
 	            view.setAlpha(0);
 	        }
 	    }
+	}
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		getActivity().getActionBar().setTitle("iJMC");
 	}
 
 }

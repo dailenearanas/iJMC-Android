@@ -16,6 +16,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -160,8 +162,9 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 		} else {
 			Log.e("IMAGEHOLDER", "image here.");
 			ImageView imageHolder = (ImageView)view.findViewById(R.id.profileImageHolder);
-			imageHolder.setScaleType(ScaleType.FIT_CENTER);
-			imageHolder.setImageBitmap(Utilities.createRoundedMaskImage(getActivity(), sp.getString(Config.SHA_USR_IMAGE_FILE, "")));
+//			imageHolder.setScaleType(ScaleType.FIT_CENTER);
+			Bitmap bmp = BitmapFactory.decodeFile(getActivity().getCacheDir() + "/images/" + sp.getString(Config.SHA_USR_IMAGE_FILE, ""));
+			imageHolder.setImageBitmap(Utilities.getRoundedRectBitmap(bmp, 100));
 			imageHolder.invalidate();
 		}
 		
@@ -469,13 +472,14 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
+			Bitmap bmp = BitmapFactory.decodeFile(getActivity().getCacheDir() + "/images/" + imageName);
 			TransitionDrawable td = new TransitionDrawable(new Drawable[] {
 				new ColorDrawable(Color.TRANSPARENT),
-						new BitmapDrawable(Utilities.createRoundedMaskImage(context, imageName))	
+						new BitmapDrawable(Utilities.getRoundedRectBitmap(bmp, 90))	
 			});
 			ImageView imageView = (ImageView)((Activity)this.context).findViewById(R.id.profileImageHolder);
 			imageView.setImageDrawable(td);
-			imageView.setScaleType(ScaleType.FIT_CENTER);
+//			imageView.setScaleType(ScaleType.CENTER_INSIDE);
 			td.startTransition(3000);
 		}
 	}

@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ public class ContentGrabberService extends IntentService{
 				forSeals(response);
 			} else if(sourceFile.equals(Config.MUSIC_JSON.substring(0, Config.MUSIC_JSON.length()-5))) {
 				forMusic(response);
+				obtainMusicFile();
 			} else if(sourceFile.equals(Config.OTHER_JSON.substring(0, Config.OTHER_JSON.length()-5))) {
 				forOther(response);
 			}
@@ -312,6 +314,41 @@ public class ContentGrabberService extends IntentService{
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+		}
+	}
+	
+		private void obtainMusicFile() {
+		/*DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+		SQLiteDatabase sqliteDB = handler.getReadableDatabase();*/
+		
+		try {
+			
+			URL url = new URL(Config.MUSIC_BASE_URL + "/" + Config.MUSIC_FILENAME);
+			URLConnection connection = url.openConnection();
+			connection.connect();
+			
+			InputStream in = url.openStream();
+			
+			File file = new File(Config.EXTERNAL_FOLDER + "/music_file");
+			Log.e("IS DIRECTORY", file.isDirectory()+"");
+			Log.e("IS FILE", file.isFile()+"");
+			file.mkdirs();
+			
+			OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER + "/music_file/" + Config.MUSIC_FILENAME);
+			byte data[] = new byte[1024];
+			int count = 0;
+			while((count = in.read(data)) != -1) {
+				out.write(data, 0, count);
+			}
+			
+			out.flush();
+			out.close();
+			in.close();
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	

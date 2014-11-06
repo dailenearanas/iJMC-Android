@@ -1,34 +1,31 @@
 package com.android.ijmc.utilities;
 
-import java.io.File;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
-import android.util.Log;
-import android.view.Gravity;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.ijmc.R;
+import com.android.ijmc.config.Config;
+import com.android.ijmc.models.FacultyModel;
 
 public class Utilities {
 	
 	static int CONST_IMAGE_HEIGHT_DST = 480;
 	
-	static int CONST_IMAGE_THUMB_HEIGHT_DST = 240;
+	static int CONST_IMAGE_THUMB_HEIGHT_DST = 150;
 
 	public Utilities() {
 		// TODO Auto-generated constructor stub
@@ -39,7 +36,7 @@ public class Utilities {
 		return jsonArray;
 	}
 	
-	public static Bitmap createRoundedMaskImage(Context context, String filename){
+	/*public static Bitmap createRoundedMaskImage(Context context, String filename){
 		
 		File checkImage = new File(context.getCacheDir() + "/images/" + filename);
 		Bitmap myPic = BitmapFactory.decodeResource(context.getResources(), R.drawable.image_holder);
@@ -78,6 +75,40 @@ public class Utilities {
 		paint.setXfermode(null);
 		
 		return maskMono;
+	}*/
+	
+	public static Bitmap getRoundedRectBitmap(Bitmap bitmap, int pixels) {
+		bitmap = createScaledBitmapRatio(bitmap, CONST_IMAGE_THUMB_HEIGHT_DST);
+		Bitmap result = null;
+		Canvas canvas;
+		int color;
+		Paint paint;
+		Rect rect;
+		RectF rectF;
+		int roundPx;
+		
+		try {
+			result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+			Bitmap.Config.ARGB_8888);
+			canvas = new Canvas(result);
+	
+			color = 0xff424242;
+			paint = new Paint();
+			rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+			rectF = new RectF(rect);
+			roundPx = pixels;
+	
+			paint.setAntiAlias(true);
+			canvas.drawARGB(0, 0, 0, 0);
+			paint.setColor(color);
+			canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+	
+			paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+			canvas.drawBitmap(bitmap, rect, rect, paint);
+		} catch (NullPointerException e) {
+			// return bitmap;
+		} catch (OutOfMemoryError o){}
+			return result;
 	}
 	
 	
@@ -102,6 +133,26 @@ public class Utilities {
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View contextView = inflater.inflate(R.layout.context_menu_view, null);
 		return contextView;
+	}
+	
+	public static View createViewForFacultyInformation(LayoutInflater inflater, FacultyModel model, int position) {
+		
+		View view = inflater.inflate(R.layout.college_single_item_view, null);
+		
+		ImageView facultyBadge = (ImageView)view.findViewById(R.id.facultyBadge);
+		TextView facultyName = (TextView)view.findViewById(R.id.fcltyName);
+		TextView facultyId = (TextView)view.findViewById(R.id.idNum);
+		TextView facultyDept = (TextView)view.findViewById(R.id.fcltyDept);
+		TextView facultyPosition = (TextView)view.findViewById(R.id.fcltyPosition);
+		
+		Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/" + model.getFacultyImagePath());
+		facultyBadge.setImageBitmap(Utilities.getRoundedRectBitmap(bmp, 256));
+		facultyName.setText(model.getFacultyFname() + " " + model.getFacultyMname() + " " + model.getFacultyLname() + ", " + model.getFacultySfx());
+		facultyId.setText(model.getFacultyId());
+		facultyDept.setText(model.getFacultyDeptId().substring(0, model.getFacultyDeptId().lastIndexOf('-')));
+		facultyPosition.setText(model.getFacultyPositionId());
+		
+		return view;
 	}
 
 }

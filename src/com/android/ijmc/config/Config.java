@@ -24,7 +24,11 @@ public class Config {
     
     public static String IMAGE_STUDENT_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/student_img";
     
+    public static String MUSIC_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/music_files";
+    
     public static String EXTERNAL_FOLDER = Environment.getExternalStorageDirectory() + "/.ijmc";
+    
+    public static String MUSIC_FILENAME = "Luther_Vandross_The_Closer_I_Get_To_You.mp3";
     
 
     

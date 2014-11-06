@@ -2,6 +2,7 @@ package com.android.ijmc.helpers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -234,8 +235,16 @@ public class Queries {
 		return models;
 	}
 
+	/**
+	 * Queries items from the database that contains the information of every faculty registered on the database.
+	 * this requires instances of SQLiteDatabase, DatabaseHandler, tag (faculty department).
+	 * @param sqliteDB
+	 * @param dbHandler
+	 * @param tag
+	 * @return
+	 */
 	public static ArrayList<FacultyModel> getFacultyListItem(SQLiteDatabase sqliteDB,
-			DatabaseHandler dbHandler) {
+			DatabaseHandler dbHandler, String tag) {
 
 		ArrayList<FacultyModel> models = new ArrayList<FacultyModel>();
 		FacultyModel facultyModel;
@@ -264,9 +273,14 @@ public class Queries {
 				facultyModel.facultyImagePath = mCursor.getString(7);
 				facultyModel.facultyDeptId = mCursor.getString(10)+"-"+mCursor.getString(8);
 				facultyModel.facultyPositionId = mCursor.getString(11);
-
-				models.add(facultyModel);
-
+				
+				if(!mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school") && !mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school") && tag.toLowerCase(Locale.getDefault()).equals("college")) {
+					models.add(facultyModel);
+				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school") && tag.toLowerCase(Locale.getDefault()).equals("high school")) {
+					models.add(facultyModel);
+				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school") && tag.toLowerCase(Locale.getDefault()).equals("grade school")) {
+					models.add(facultyModel);
+				}
 			} while (mCursor.moveToNext());
 		}
 
