@@ -6,10 +6,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class DepartmentListViewAdapter extends BaseAdapter{
 	ArrayList<DepartmentModel> departments;
 	Context context;
 	LayoutInflater inflater;
+	private int lastPosition = -1;
 	
 	public DepartmentListViewAdapter(Context context, ArrayList<DepartmentModel> departments) {
 		// TODO Auto-generated constructor stub
@@ -89,6 +91,10 @@ public class DepartmentListViewAdapter extends BaseAdapter{
 				v.deptDesc.setText(item.getDeptDesc());
 			}
 		}.execute(holder);
+		
+		Animation animation = AnimationUtils.loadAnimation(context, (position > lastPosition) ? R.animator.up_from_bottom : R.animator.down_from_top);
+		convertView.startAnimation(animation);
+		lastPosition = position;
 		
 		return convertView;
 	}

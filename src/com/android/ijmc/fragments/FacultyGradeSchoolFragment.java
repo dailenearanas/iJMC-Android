@@ -16,7 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.android.ijmc.R;
-import com.android.ijmc.adapters.FacultyGradeSchoolListAdapter;
+import com.android.ijmc.adapters.FacultyListAdapter;
 import com.android.ijmc.helpers.DatabaseHandler;
 import com.android.ijmc.helpers.FacultyCollectionComparator;
 import com.android.ijmc.helpers.Queries;
@@ -26,7 +26,7 @@ import com.android.ijmc.utilities.Utilities;
 public class FacultyGradeSchoolFragment extends Fragment {
 
 	ArrayList<FacultyModel> faculties;
-	FacultyGradeSchoolListAdapter adapter;
+	FacultyListAdapter adapter;
 	ListView listView;
 	LayoutInflater inflater;
 	FacultyCollectionComparator comparator;
@@ -55,7 +55,7 @@ public class FacultyGradeSchoolFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_faculty_gradeschool, container, false);
 		
 		listView = (ListView) view.findViewById(R.id.facultyGradeSchoolList);
-		adapter = new FacultyGradeSchoolListAdapter(getActivity(), faculties);
+		adapter = new FacultyListAdapter(getActivity(), faculties);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 

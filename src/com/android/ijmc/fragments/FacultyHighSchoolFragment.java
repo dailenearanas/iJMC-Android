@@ -16,7 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.android.ijmc.R;
-import com.android.ijmc.adapters.FacultyHighSchoolListAdapter;
+import com.android.ijmc.adapters.FacultyListAdapter;
 import com.android.ijmc.helpers.DatabaseHandler;
 import com.android.ijmc.helpers.FacultyCollectionComparator;
 import com.android.ijmc.helpers.Queries;
@@ -26,7 +26,7 @@ import com.android.ijmc.utilities.Utilities;
 public class FacultyHighSchoolFragment extends Fragment{
 	
 	ListView listView;
-	FacultyHighSchoolListAdapter adapter;
+	FacultyListAdapter adapter;
 	ArrayList<FacultyModel> faculties;
 	LayoutInflater inflater;
 	FacultyCollectionComparator comparator;
@@ -55,7 +55,7 @@ public class FacultyHighSchoolFragment extends Fragment{
 		Collections.sort(faculties, comparator);
 		
 		listView = (ListView)view.findViewById(R.id.facultyHighSchoolList);
-		adapter = new FacultyHighSchoolListAdapter(getActivity(), faculties);
+		adapter = new FacultyListAdapter(getActivity(), faculties);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
