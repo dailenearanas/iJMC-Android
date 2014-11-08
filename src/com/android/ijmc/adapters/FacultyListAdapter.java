@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ public class FacultyListAdapter extends BaseAdapter{
 	Context context;
 	LayoutInflater inflater;
 	ArrayList<FacultyModel> faculties;
+	private int lastPosition = -1;
 
 	public FacultyListAdapter(Context context, ArrayList<FacultyModel> faculties) {
 		// TODO Auto-generated constructor stub
@@ -86,6 +89,11 @@ public class FacultyListAdapter extends BaseAdapter{
 			}
 			
 		}.execute(holder);
+		
+		Animation animation = AnimationUtils.loadAnimation(context, (position > lastPosition) ? R.animator.up_from_bottom : R.animator.down_from_top);
+		convertView.startAnimation(animation);
+		lastPosition = position;
+		
 		return convertView;
 	}
 	
