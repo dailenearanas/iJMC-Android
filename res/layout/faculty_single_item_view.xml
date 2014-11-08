@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="25dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="25dp" >
+
+    <ImageView
+        android:id="@+id/facultyBadge"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_gravity="center|center"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/fcltyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center|center"
+        android:text="Medium Text"
+        android:textColor="@android:color/black"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/idNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|center"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/fcltyDept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:focusableInTouchMode="true"
+        android:gravity="center|center"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/fcltyPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center|center"
+        android:text="TextView" />
+
+</LinearLayout>

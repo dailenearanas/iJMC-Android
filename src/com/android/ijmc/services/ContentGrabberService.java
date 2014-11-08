@@ -56,6 +56,7 @@ public class ContentGrabberService extends IntentService{
 				forContent(response);
 			} else if(sourceFile.equals(Config.DEPARTMENT_JSON.substring(0, Config.DEPARTMENT_JSON.length()-5))) {
 				forDepartment(response);
+				obtainDepartmentImages();
 			} else if(sourceFile.equals(Config.COURSE_JSON.substring(0, Config.COURSE_JSON.length()-5))) {
 				forCourse(response);
 			} else if(sourceFile.equals(Config.FACULTY_JSON.substring(0, Config.FACULTY_JSON.length()-5))) {
@@ -93,17 +94,55 @@ public class ContentGrabberService extends IntentService{
 				singleContent.deptTitle = obj.getString(Config.TAG_DEPT_TITLE);
 				singleContent.deptDesc = obj.getString(Config.TAG_DEPT_DESC);
 				
+				String imagePath = obj.getString(Config.TAG_DEPT_IMAGEPATH);
+				if(imagePath == null) {
+					imagePath = "";
+				}
+				singleContent.img_path = imagePath;
+				
 				Queries.InsertDepartment(sqliteDB, handler, singleContent);
 			}
 			
-			ArrayList<DepartmentModel> items = Queries.getDepartment(sqliteDB, handler);
-			for(DepartmentModel model : items) {
-				Log.e("DEPARTMENT", model.getDeptId()+"");
-			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
 		}
-		
+	}
+	
+	private void obtainDepartmentImages() {
+		DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+		SQLiteDatabase sqliteDB = handler.getReadableDatabase();
+		List<String> deptImages = Queries.getDepartmentImages(sqliteDB, handler);
+		for(String image : deptImages) {
+			int count = 0;
+			Log.e("SOURCE", Config.IMAGE_DEPARTMENT_BASE_URL + "/" + image);
+			URL url;
+			try {
+				url = new URL(Config.IMAGE_DEPARTMENT_BASE_URL + "/" + image);
+				URLConnection connection = url.openConnection();
+				connection.connect();
+				
+				InputStream in = new BufferedInputStream(url.openStream());
+				
+				File imageDir = new File(Config.EXTERNAL_FOLDER + "/dept_image");
+				imageDir.mkdirs();
+				
+				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER + "/dept_image/" + image);
+				byte[] data = new byte[1024];
+				while((count = in.read(data)) != -1) {
+					out.write(data,0,count);
+				}
+				out.flush();
+				out.close();
+				in.close();
+				
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void forContent(String response){
@@ -187,8 +226,6 @@ public class ContentGrabberService extends IntentService{
 		DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
 		SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 		List<String> fimages = Queries.getFacultyImages(sqliteDB, handler);
-		
-		
 		
 		for(String image : fimages) {
 			try {
@@ -302,6 +339,7 @@ public class ContentGrabberService extends IntentService{
 			for(int i=0;i<jsonArray.length();i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				MusicModel music = new MusicModel();
+				
 				music.musicName = obj.getString(Config.TAG_MUSIC_NAME);
 				music.musicPath = obj.getString(Config.TAG_MUSIC_PATH);
 				

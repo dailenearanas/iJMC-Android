@@ -109,6 +109,19 @@ public class MainMenuFragment extends Fragment{
 					case 4:
 						imageView.setImageResource(R.drawable.ssg);
 						subView.setBackgroundColor(Color.parseColor("#ff4e8e"));
+						imageView.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								SSGPagerFragment jmcSSG = new SSGPagerFragment();
+								transaction = getFragmentManager().beginTransaction();
+								transaction.replace(R.id.baseMainLayout, jmcSSG);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+								transaction.addToBackStack(null);
+								transaction.commit();
+							}
+						});
 						break;
 					case 5:
 						imageView.setImageResource(R.drawable.hymn);
@@ -121,7 +134,7 @@ public class MainMenuFragment extends Fragment{
 								JMCHymnFragment jmcHymnFragment = new JMCHymnFragment();
 								transaction = getFragmentManager().beginTransaction();
 								transaction.replace(R.id.baseMainLayout, jmcHymnFragment);
-								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 								transaction.addToBackStack(null);
 								transaction.commit();
 							}
@@ -130,6 +143,19 @@ public class MainMenuFragment extends Fragment{
 					case 6:
 						imageView.setImageResource(R.drawable.dept);
 						subView.setBackgroundColor(Color.parseColor("#fe3d82"));
+						imageView.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								DepartmentsFragment jmcDepartmentsFragment = new DepartmentsFragment();
+								transaction = getFragmentManager().beginTransaction();
+								transaction.replace(R.id.baseMainLayout, jmcDepartmentsFragment);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+								transaction.addToBackStack(null);
+								transaction.commit();
+							}
+						});
 						break;
 					case 7:
 						imageView.setImageResource(R.drawable.seal);

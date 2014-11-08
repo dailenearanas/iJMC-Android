@@ -7,6 +7,7 @@ public class DepartmentModel {
     public int deptId;
     public String deptTitle;
     public String deptDesc;
+    public String img_path;
 
     public int getDeptId(){
         return deptId;
@@ -18,5 +19,9 @@ public class DepartmentModel {
 
     public String getDeptDesc(){
         return deptDesc;
+    }
+    
+    public String getImagePath() {
+    	return img_path;
     }
 }

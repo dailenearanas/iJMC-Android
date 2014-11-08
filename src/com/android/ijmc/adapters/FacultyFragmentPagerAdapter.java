@@ -4,9 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.android.ijmc.fragments.CollegeFragment;
-import com.android.ijmc.fragments.GradeSchoolFragment;
-import com.android.ijmc.fragments.HighSchoolFragment;
+import com.android.ijmc.fragments.FacultyCollegeFragment;
+import com.android.ijmc.fragments.FacultyGradeSchoolFragment;
+import com.android.ijmc.fragments.FacultyHighSchoolFragment;
 
 public class FacultyFragmentPagerAdapter extends FragmentStatePagerAdapter{
 
@@ -18,14 +18,13 @@ public class FacultyFragmentPagerAdapter extends FragmentStatePagerAdapter{
 
 	@Override
 	public Fragment getItem(int position) {
-		// TODO Auto-generated method stub
 		switch (position) {
 		case 0:
-			return CollegeFragment.newInstance();
+			return FacultyCollegeFragment.newInstance();
 		case 1:
-			return HighSchoolFragment.newInstance();
+			return FacultyHighSchoolFragment.newInstance();
 		case 2:
-			return GradeSchoolFragment.newInstance();
+			return FacultyGradeSchoolFragment.newInstance();
 		default:
 			return null;
 		}
@@ -37,7 +36,7 @@ public class FacultyFragmentPagerAdapter extends FragmentStatePagerAdapter{
 		return PAGES;
 	}
 	
-	public String[] getTitles() {
+	public static String[] getTitles() {
 		return new String[]{"College Department","HighSchool Department", "GradeSchool Department"};
 	}
 	

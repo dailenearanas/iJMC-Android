@@ -173,6 +173,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 		DialogInterface dialog;
 		Context context;
 		ProgressDialog progressDialog;
+		long startTime;
 		
 		public LoginAsyncTask(Context context, DialogInterface dialog){
 			this.dialog = dialog;
@@ -183,6 +184,8 @@ public class LoginActivity extends Activity implements OnClickListener{
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
+			
+			startTime = System.currentTimeMillis();
 			
 			prepareDialog = new ProgressDialog(context);
 			prepareDialog.setIndeterminate(true);
@@ -201,11 +204,11 @@ public class LoginActivity extends Activity implements OnClickListener{
 			
 			String response = LoginActivity.this.serviceHandler.makeServiceCall(params[0], 1);
 			
-			if(response == null) {
+			/*if(response == null) {
 				Log.e("LOGIN RESPONSE", "Error in Response");
 			} else {
 				Log.e("LOGIN RESPONSE", response.toString());
-			}
+			}*/
 			
 			return response;
 		}
@@ -254,8 +257,9 @@ public class LoginActivity extends Activity implements OnClickListener{
 				}
 			} else {
 				progressDialog.dismiss();
-				Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+				Toast.makeText(LoginActivity.this, "Login failed after " + (System.currentTimeMillis()- startTime)/1000 + " seconds", Toast.LENGTH_LONG).show();
 			}
+			
 		}
 		
 	}

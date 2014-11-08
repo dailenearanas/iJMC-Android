@@ -39,7 +39,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "dept_id INTEGER, " +
                 "dept_title TEXT, " +
-                "dept_desc TEXT ) ");
+                "dept_desc TEXT," +
+                "img_path TEXT) ");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ studentsTbl +" " +
                 "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +

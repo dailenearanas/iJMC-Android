@@ -17,7 +17,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+
+import com.android.ijmc.config.Config;
 
 public class ServiceHandler {
 
@@ -26,7 +31,6 @@ public class ServiceHandler {
     public final static int POST = 2;
 
     public ServiceHandler() {
-
     }
 
     /**
@@ -48,10 +52,12 @@ public class ServiceHandler {
                                   List<NameValuePair> params) {
         try {
             // http client
-            DefaultHttpClient httpClient = new DefaultHttpClient();
+        	HttpParams httpParams = new BasicHttpParams();
+        	HttpConnectionParams.setConnectionTimeout(httpParams, Config.TIMEOUT);
+        	
+            DefaultHttpClient httpClient = new DefaultHttpClient(httpParams);
             HttpEntity httpEntity = null;
             HttpResponse httpResponse = null;
-
             // Checking http request method type
             if (method == POST) {
                 HttpPost httpPost = new HttpPost(url);
@@ -70,7 +76,6 @@ public class ServiceHandler {
                     url += "?" + paramString;
                 }
                 HttpGet httpGet = new HttpGet(url);
-
                 httpResponse = httpClient.execute(httpGet);
 
             }

@@ -10,12 +10,14 @@ public class Config {
         
     }
     
-    public static String HOST_NAME = "http://192.168.43.74";
+    public static int TIMEOUT = 3000;
+    
+    public static String HOST_NAME = "http://192.168.56.1";
     
     public static String FOLDER_NAME = "ijmc-temp";
-
+    
     public static String BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public";
-
+    
     public static String JSON_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jsonlisting";
     
     public static String JSON_REQUEST_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jsonrequest";
@@ -23,6 +25,8 @@ public class Config {
     public static String IMAGE_FACULTY_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/faculty_image";
     
     public static String IMAGE_STUDENT_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/student_img";
+    
+    public static String IMAGE_DEPARTMENT_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/dept_image";
     
     public static String MUSIC_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/music_files";
     
@@ -147,6 +151,8 @@ public class Config {
     public static final String TAG_DEPT_TITLE = "dept_title";
 
     public static final String TAG_DEPT_DESC = "dept_desc";
+    
+    public static final String TAG_DEPT_IMAGEPATH = "img_path";
     
    //COURSE TAGS
     public static final String TAG_COURSE_ID = "id";

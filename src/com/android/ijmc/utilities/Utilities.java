@@ -137,7 +137,7 @@ public class Utilities {
 	
 	public static View createViewForFacultyInformation(LayoutInflater inflater, FacultyModel model, int position) {
 		
-		View view = inflater.inflate(R.layout.college_single_item_view, null);
+		View view = inflater.inflate(R.layout.faculty_single_item_view, null);
 		
 		ImageView facultyBadge = (ImageView)view.findViewById(R.id.facultyBadge);
 		TextView facultyName = (TextView)view.findViewById(R.id.fcltyName);

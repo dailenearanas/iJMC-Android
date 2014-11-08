@@ -323,9 +323,10 @@ public class Queries {
 			do {
 				departmentModel = new DepartmentModel();
 
-				departmentModel.deptId = mCursor.getInt(0);
-				departmentModel.deptTitle = mCursor.getString(1);
-				departmentModel.deptDesc = mCursor.getString(2);
+				departmentModel.deptId = mCursor.getInt(1);
+				departmentModel.deptTitle = mCursor.getString(2);
+				departmentModel.deptDesc = mCursor.getString(3);
+				departmentModel.img_path = mCursor.getString(4);
 
 				models.add(departmentModel);
 
@@ -336,6 +337,24 @@ public class Queries {
 		dbHandler.close();
 
 		return models;
+	}
+	
+	public static List<String> getDepartmentImages(SQLiteDatabase sqliteDB, DatabaseHandler handler){
+		List<String> deptImages = new ArrayList<String>();
+		String rawQuery = "SELECT img_path FROM " + DatabaseHandler.departmentsTbl;
+		//SOMETHING's WRONG WITH THE DATABASE
+		sqliteDB = handler.getReadableDatabase();
+		Cursor mCursor = sqliteDB.rawQuery(rawQuery, null);
+		mCursor.moveToFirst();
+		if(!mCursor.isAfterLast()) {
+			do {
+				String image_path = mCursor.getString(0);
+				deptImages.add(image_path);
+			}while(mCursor.moveToNext());
+		}
+		
+		return deptImages;
+		
 	}
 
 	public static ArrayList<CourseModel> getCourses(SQLiteDatabase sqliteDB,
@@ -574,6 +593,7 @@ public class Queries {
 		values.put("dept_id", department.getDeptId());
 		values.put("dept_title", department.getDeptTitle());
 		values.put("dept_desc", department.getDeptDesc());
+		values.put("img_path", department.getImagePath());
 
 		sqLiteDB.insert(DatabaseHandler.departmentsTbl, null, values);
 		sqLiteDB.close();
@@ -690,7 +710,7 @@ public class Queries {
 				+ DatabaseHandler.departmentsTbl + " "
 				+ "( id INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ "dept_id INTEGER, " + "dept_title TEXT, "
-				+ "dept_desc TEXT ) ");
+				+ "dept_desc TEXT, img_path TEXT ) ");
 
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + DatabaseHandler.studentsTbl
 				+ " " + "( id INTEGER PRIMARY KEY AUTOINCREMENT, "
