@@ -160,6 +160,19 @@ public class MainMenuFragment extends Fragment{
 					case 7:
 						imageView.setImageResource(R.drawable.seal);
 						subView.setBackgroundColor(Color.parseColor("#fe327b"));
+						imageView.setOnClickListener(new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								SchoolSealFragment jmcSchoolSealFragment = new SchoolSealFragment();
+								transaction = getFragmentManager().beginTransaction();
+								transaction.replace(R.id.baseMainLayout, jmcSchoolSealFragment);
+								transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+								transaction.addToBackStack(null);
+								transaction.commit();
+							}
+						});
 						break;
 					}
 					((TextView)subView.findViewById(R.id.menuTitle)).setText(menuTitles[menuTitlesndx]);

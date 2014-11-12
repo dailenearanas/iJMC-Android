@@ -476,6 +476,23 @@ public class Queries {
 
 		return models;
 	}
+	public static List<String> getSealImagePath(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler){
+		List<String> simages = new ArrayList<String>();
+		sqliteDB = dbHandler.getReadableDatabase();
+		Cursor mCursor = sqliteDB.rawQuery("select img_path from "+DatabaseHandler.sealTbl.toString(), null);
+		mCursor.moveToFirst();
+		if (!mCursor.isAfterLast()) {
+			do {
+				simages.add(mCursor.getString(0));
+
+			} while (mCursor.moveToNext());
+		}
+
+		mCursor.close();
+		dbHandler.close();
+		
+		return simages;
+	}
 
 	public static ArrayList<MusicModel> getMusic(SQLiteDatabase sqliteDB,
 			DatabaseHandler dbHandler) {

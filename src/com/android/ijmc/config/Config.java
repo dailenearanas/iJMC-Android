@@ -10,9 +10,9 @@ public class Config {
         
     }
     
-    public static int TIMEOUT = 3000;
+    public static int TIMEOUT = 10000;
     
-    public static String HOST_NAME = "http://192.168.56.1";
+    public static String HOST_NAME = "http://192.168.43.74";
     
     public static String FOLDER_NAME = "ijmc-temp";
     
@@ -27,6 +27,8 @@ public class Config {
     public static String IMAGE_STUDENT_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/student_img";
     
     public static String IMAGE_DEPARTMENT_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/dept_image";
+    
+    public static String IMAGE_SEAL_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jmcseal_image";
     
     public static String MUSIC_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/music_files";
     

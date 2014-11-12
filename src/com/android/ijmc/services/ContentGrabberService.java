@@ -68,6 +68,7 @@ public class ContentGrabberService extends IntentService{
 				forSSG(response);
 			} else if(sourceFile.equals(Config.SEALS_JSON.substring(0, Config.SEALS_JSON.length()-5))) {
 				forSeals(response);
+				obtainSealImages();
 			} else if(sourceFile.equals(Config.MUSIC_JSON.substring(0, Config.MUSIC_JSON.length()-5))) {
 				forMusic(response);
 				obtainMusicFile();
@@ -328,6 +329,39 @@ public class ContentGrabberService extends IntentService{
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+		}
+	}
+	
+	private void obtainSealImages() {
+		DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+		SQLiteDatabase sqliteDB = handler.getReadableDatabase();
+		List<String> simages = Queries.getSealImagePath(sqliteDB, handler);
+		for(String image : simages) {
+			try {
+				int count = 0;
+				Log.e("SOURCE", Config.IMAGE_SEAL_BASE_URL + "/" + image);
+				URL url = new URL(Config.IMAGE_SEAL_BASE_URL + "/" + image);
+				
+				URLConnection connection = url.openConnection();
+				connection.connect();
+				
+				InputStream in = new BufferedInputStream(url.openStream());
+				
+				File imageDir = new File(Config.EXTERNAL_FOLDER + "/seal_images");
+				imageDir.mkdirs();
+				
+				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER + "/seal_images/" + image);
+				byte[] data = new byte[1024];
+				while((count = in.read(data)) != -1) {
+					out.write(data,0,count);
+				}
+				out.flush();
+				out.close();
+				in.close();
+				
+			} catch(IOException e) {
+				Log.e("SEAL IMAGES DOWNLOAD ERROR", e.getMessage().toString());
+			}
 		}
 	}
 	

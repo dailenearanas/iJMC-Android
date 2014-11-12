@@ -2,42 +2,45 @@ package com.android.ijmc.adapters;
 
 import java.util.ArrayList;
 
-import com.android.ijmc.R;
-import com.android.ijmc.adapters.SealListAdapter.ViewHolder;
-import com.android.ijmc.models.ContentModel;
-
 import android.content.Context;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.RelativeSizeSpan;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TextView.BufferType;
+
+import com.android.ijmc.R;
+import com.android.ijmc.config.Config;
+import com.android.ijmc.models.SealsModel;
 
 public class SealListAdapter extends BaseAdapter{
-	ArrayList<ContentModel> items;
+	ArrayList<SealsModel> items;
 	Context context;
 	LayoutInflater inflater;
-	public SealListAdapter(Context context, ArrayList<ContentModel> items) {
-		// TODO Auto-generated constructor stub
+	private int lastPosition = -1;
+	
+	public SealListAdapter(Context context, ArrayList<SealsModel> items) {
 		this.items = items;
 		this.context = context;
-		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return items.size();
+		return this.items.size();
 	}
 
 	@Override
-	public ContentModel getItem(int arg0) {
+	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return items.get(arg0);
+		return null;
 	}
 
 	@Override
@@ -47,42 +50,51 @@ public class SealListAdapter extends BaseAdapter{
 	}
 
 	@Override
-	public int getItemViewType(int position) {
-		// TODO Auto-generated method stub
-		return super.getItemViewType(position);
-	}
-
-	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		ViewHolder viewHolder;
-		
+		final int pos = position;
+		ViewHolder holder;
 		if(convertView == null) {
-			convertView = inflater.inflate(R.layout.listview_jmcprofile_view, parent, false);
-			viewHolder = new ViewHolder();
-			viewHolder.textView = (TextView)convertView.findViewById(R.id.profileContentText);
+			holder = new ViewHolder();
+			convertView = this.inflater.inflate(R.layout.fragment_department_list_item, null);
+			holder.sealImage = (ImageView)convertView.findViewById(R.id.deptLogo);
+			holder.sealName = (TextView)convertView.findViewById(R.id.deptTitle);
+			holder.sealDescription = (TextView)convertView.findViewById(R.id.deptDesc);
 			
-			convertView.setTag(viewHolder);
+			convertView.setTag(holder);
 		} else {
-			viewHolder = (ViewHolder)convertView.getTag();
+			holder = (ViewHolder)convertView.getTag();
 		}
 		
-		final SpannableString spannableString = new SpannableString(items.get(position).getContentBody());
-		int x = 0;
-		for (int i = 0, ei = items.get(position).getContentBody().length(); i < ei; i++) {
-		    char c = items.get(position).getContentBody().charAt(i);
-		    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
-		        x = i;
-		        break;
-		    }
-		}
-		spannableString.setSpan(new RelativeSizeSpan(3.0f), x, x + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		viewHolder.textView.setText(spannableString, BufferType.SPANNABLE);
+		new AsyncTask<ViewHolder, Void, Bitmap>(){
+			ViewHolder v;
+			@Override
+			protected Bitmap doInBackground(ViewHolder... params) {
+				// TODO Auto-generated method stub
+				v = params[0];
+				Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/seal_images/" + items.get(pos).getSealImg());
+				return bmp;
+			}
+
+			@Override
+			protected void onPostExecute(Bitmap result) {
+				// TODO Auto-generated method stub
+				v.sealImage.setImageBitmap(result);
+				v.sealName.setText(items.get(pos).getSealName());
+				v.sealDescription.setText(items.get(pos).getSealDesc());
+			}
+		}.execute(holder);
+		
+		Animation animation = AnimationUtils.loadAnimation(context, (position > lastPosition) ? R.animator.up_from_bottom : R.animator.down_from_top);
+		convertView.startAnimation(animation);
+		lastPosition = position;
 		
 		return convertView;
 	}
 	
 	static class ViewHolder{
-		TextView textView;
+		ImageView sealImage;
+		TextView sealName;
+		TextView sealDescription;
 	}
 }
