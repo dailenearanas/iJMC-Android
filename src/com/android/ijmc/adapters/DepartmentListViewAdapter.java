@@ -1,5 +1,6 @@
 package com.android.ijmc.adapters;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -76,7 +77,8 @@ public class DepartmentListViewAdapter extends BaseAdapter{
 			protected Bitmap doInBackground(ViewHolder... arg0) {
 				// TODO Auto-generated method stub
 				v = arg0[0];
-				Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/dept_image/" + item.getImagePath());
+				File imageName = new File(Config.EXTERNAL_FOLDER + "/dept_image/" + item.getImagePath());
+				Bitmap bmp = BitmapFactory.decodeFile(imageName.getAbsolutePath());
 				if(bmp == null) {
 					bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/dept_image/jmc.png");
 				}

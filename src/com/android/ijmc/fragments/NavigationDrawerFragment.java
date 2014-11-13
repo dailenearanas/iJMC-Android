@@ -156,11 +156,9 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 
 		File image = new File(getActivity().getCacheDir()+"/images/"+sp.getString(Config.SHA_USR_IMAGE_FILE, ""));
 		if(!image.exists()){
-			Log.e("IMAGEHOLDER", "no image " + image.getAbsolutePath() + " " + image.exists());
 			ProfileImageGrabber grabber = new ProfileImageGrabber(getActivity());
 			grabber.execute(sp.getString(Config.SHA_USR_IMAGE_FILE, ""));
 		} else {
-			Log.e("IMAGEHOLDER", "image here.");
 			ImageView imageHolder = (ImageView)view.findViewById(R.id.profileImageHolder);
 //			imageHolder.setScaleType(ScaleType.FIT_CENTER);
 			Bitmap bmp = BitmapFactory.decodeFile(getActivity().getCacheDir() + "/images/" + sp.getString(Config.SHA_USR_IMAGE_FILE, ""));
@@ -231,7 +229,6 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 				dir.delete();
 			}
 		}
-		Log.e("DELETE", dir.getAbsolutePath());
 	}
 
 	public boolean isDrawerOpen() {
@@ -443,7 +440,7 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 			int count;
 			try {
 				imageName = arg0[0];
-				arg0[0] = arg0[0].replace("_", "%20");
+				arg0[0] = arg0[0].replace(" ", "%20");
 				
 				URL url = null;
 				if(sp.getString(Config.SHA_USR_TYPE, "").equals("Student")) {

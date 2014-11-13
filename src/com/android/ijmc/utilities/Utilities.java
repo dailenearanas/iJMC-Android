@@ -1,5 +1,7 @@
 package com.android.ijmc.utilities;
 
+import java.io.File;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -145,7 +147,11 @@ public class Utilities {
 		TextView facultyDept = (TextView)view.findViewById(R.id.fcltyDept);
 		TextView facultyPosition = (TextView)view.findViewById(R.id.fcltyPosition);
 		
-		Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/" + model.getFacultyImagePath());
+		File imageName = new File(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_FACULTY_IMAGE + "/" + model.getFacultyImagePath());
+		Bitmap bmp = BitmapFactory.decodeFile(imageName.getAbsolutePath());
+		if(bmp == null) {
+			bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_FACULTY_IMAGE + "/user.png");
+		}
 		facultyBadge.setImageBitmap(Utilities.getRoundedRectBitmap(bmp, 256));
 		facultyName.setText(model.getFacultyFname() + " " + model.getFacultyMname() + " " + model.getFacultyLname() + ", " + model.getFacultySfx());
 		facultyId.setText(model.getFacultyId());

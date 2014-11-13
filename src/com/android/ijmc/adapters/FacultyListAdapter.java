@@ -1,11 +1,13 @@
 package com.android.ijmc.adapters;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,9 +76,11 @@ public class FacultyListAdapter extends BaseAdapter{
 			protected Bitmap doInBackground(ViewHolder... params) {
 				// TODO Auto-generated method stub
 				v = params[0];
-				Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/" + item.getFacultyImagePath());
+				File imageName = new File(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_FACULTY_IMAGE + "/" + item.getFacultyImagePath());
+				Log.e("IMAGE DIR", imageName.getAbsolutePath());
+				Bitmap bmp = BitmapFactory.decodeFile(imageName.getAbsolutePath());
 				if(bmp == null) {
-					bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/user.png");
+					bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_FACULTY_IMAGE + "/user.png");
 				}
 				return Utilities.getRoundedRectBitmap(bmp, 100);
 			}

@@ -113,8 +113,6 @@ public class ContentGrabberService extends IntentService {
 
 				if (imagePath == null) {
 					imagePath = "";
-				} else {
-					imagePath = imagePath.replace(" ", "_");
 				}
 
 				singleContent.img_path = imagePath;
@@ -136,21 +134,20 @@ public class ContentGrabberService extends IntentService {
 				.getDepartmentImages(sqliteDB, handler);
 		for (String image : deptImages) {
 			int count = 0;
-			Log.e("SOURCE", Config.IMAGE_DEPARTMENT_BASE_URL + "/" + image);
 			URL url;
 			try {
-				String urlImage = image.replace("_", "%20");
+				String urlImage = image.replace(" ", "%20");
 				url = new URL(Config.IMAGE_DEPARTMENT_BASE_URL + "/" + urlImage);
 				URLConnection connection = url.openConnection();
 				connection.connect();
 
 				InputStream in = new BufferedInputStream(url.openStream());
 
-				File imageDir = new File(Config.EXTERNAL_FOLDER + "/dept_image");
+				File imageDir = new File(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_DEPT_IMAGE);
 				imageDir.mkdirs();
 
 				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
-						+ "/dept_image/" + image);
+						+ "/" + Config.EXTERNAL_FOLDER_DEPT_IMAGE + "/" + image);
 				byte[] data = new byte[1024];
 				while ((count = in.read(data)) != -1) {
 					out.write(data, 0, count);
@@ -183,12 +180,6 @@ public class ContentGrabberService extends IntentService {
 				content.contentBody = obj.getString(Config.TAG_CONTENT_BODY);
 				Queries.InsertContent(sqliteDB, handler, content);
 			}
-
-			ArrayList<ContentModel> contents = Queries.getContents(sqliteDB,
-					handler);
-			for (ContentModel item : contents) {
-				Log.e("CONTENT", item.getContentType());
-			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage()
 					.toString());
@@ -209,12 +200,6 @@ public class ContentGrabberService extends IntentService {
 				course.courseDesc = obj.getString(Config.TAG_COURSE_DESC);
 				course.deptId = obj.getInt(Config.TAG_COURSE_DEPT_ID);
 				Queries.InsertCourse(sqliteDB, handler, course);
-			}
-
-			ArrayList<CourseModel> course = Queries.getCourses(sqliteDB,
-					handler);
-			for (CourseModel item : course) {
-				Log.e("COURSE", item.getCourseTitle());
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage()
@@ -239,19 +224,13 @@ public class ContentGrabberService extends IntentService {
 				faculty.facultyGender = obj
 						.getString(Config.TAG_FACULTY_GENDER);
 				String imageFilename = obj.getString(Config.TAG_FACULTY_IMAGE);
-				imageFilename = imageFilename.replace(" ", "_");
+//				imageFilename = imageFilename.replace(" ", "_");
 				faculty.facultyImagePath = imageFilename;
 				faculty.facultyDeptId = obj.getString(Config.TAG_FACULTY_DEPT);
 				faculty.facultyPositionId = obj
 						.getString(Config.TAG_FACULTY_POSITION);
 
 				Queries.InsertFaculty(sqliteDB, handler, faculty);
-			}
-
-			ArrayList<FacultyModel> faculty = Queries.getFaculty(sqliteDB,
-					handler);
-			for (FacultyModel item : faculty) {
-				Log.e("FACULTY", item.getFacultyId());
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage()
@@ -268,8 +247,8 @@ public class ContentGrabberService extends IntentService {
 		for (String image : fimages) {
 			try {
 				int count = 0;
-				String urlImage = image.replace("_", "%20");
-				Log.e("SOURCE", Config.IMAGE_FACULTY_BASE_URL + "/" + urlImage);
+				String urlImage = image.replace(" ", "%20");
+				Log.e("SOURCE", Config.IMAGE_FACULTY_BASE_URL + "/thumb/" + urlImage);
 				URL url = new URL(Config.IMAGE_FACULTY_BASE_URL + "/thumb/"
 						+ urlImage);
 
@@ -279,11 +258,11 @@ public class ContentGrabberService extends IntentService {
 				InputStream in = new BufferedInputStream(url.openStream());
 
 				File imageDir = new File(Config.EXTERNAL_FOLDER
-						+ "/faculty_images");
+						+ "/" + Config.EXTERNAL_FOLDER_FACULTY_IMAGE);
 				imageDir.mkdirs();
 
 				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
-						+ "/faculty_images/" + image);
+						+ "/" + Config.EXTERNAL_FOLDER_FACULTY_IMAGE + "/" + image);
 				byte[] data = new byte[1024];
 				while ((count = in.read(data)) != -1) {
 					out.write(data, 0, count);
@@ -314,12 +293,6 @@ public class ContentGrabberService extends IntentService {
 
 				Queries.InsertPosition(sqliteDB, handler, position);
 			}
-
-			ArrayList<PositionModel> position = Queries.getPositions(sqliteDB,
-					handler);
-			for (PositionModel item : position) {
-				Log.e("POSITION", item.getPositionTitle());
-			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage()
 					.toString());
@@ -338,7 +311,7 @@ public class ContentGrabberService extends IntentService {
 				ssg.ssgFname = obj.getString(Config.TAG_SSG_FNAME);
 				ssg.ssgMname = obj.getString(Config.TAG_SSG_MNAME);
 				ssg.ssgLname = obj.getString(Config.TAG_SSG_LNAME);
-				ssg.ssgImage = obj.getString(Config.TAG_SSG_FNAME);
+				ssg.ssgImage = obj.getString(Config.TAG_SSG_IMAGE);
 				ssg.ssgLevel = obj.getString(Config.TAG_SSG_LEVEL);
 				ssg.ssgCrsId = obj.getInt(Config.TAG_SSG_CRS_ID);
 				ssg.ssgPosId = obj.getInt(Config.TAG_SSG_POS_ID);
@@ -366,17 +339,12 @@ public class ContentGrabberService extends IntentService {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				SealsModel seal = new SealsModel();
 				String imageFilename = obj.getString(Config.TAG_SEAL_IMAGE);
-				imageFilename = imageFilename.replace(" ", "_");
+//				imageFilename = imageFilename.replace(" ", "_");
 				seal.sealImg = imageFilename;
 				seal.sealName = obj.getString(Config.TAG_SEAL_NAME);
 				seal.sealDesc = obj.getString(Config.TAG_SEAL_DESC);
 
 				Queries.InsertSeal(sqliteDB, handler, seal);
-			}
-
-			ArrayList<SealsModel> seal = Queries.getSeals(sqliteDB, handler);
-			for (SealsModel item : seal) {
-				Log.e("SEAL", item.getSealName());
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage()
@@ -392,8 +360,7 @@ public class ContentGrabberService extends IntentService {
 		for (String image : simages) {
 			try {
 				int count = 0;
-				String urlImage = image.replace("_", "%20");
-				Log.e("SOURCE", Config.IMAGE_SEAL_BASE_URL + "/" + urlImage);
+				String urlImage = image.replace(" ", "%20");
 				URL url = new URL(Config.IMAGE_SEAL_BASE_URL + "/" + urlImage);
 
 				URLConnection connection = url.openConnection();
@@ -402,11 +369,11 @@ public class ContentGrabberService extends IntentService {
 				InputStream in = new BufferedInputStream(url.openStream());
 
 				File imageDir = new File(Config.EXTERNAL_FOLDER
-						+ "/seal_images");
+						+ "/" + Config.EXTERNAL_FOLDER_SEAL_IMAGE);
 				imageDir.mkdirs();
 
 				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
-						+ "/seal_images/" + image);
+						+ "/" + Config.EXTERNAL_FOLDER_SEAL_IMAGE + "/" + image);
 				byte[] data = new byte[1024];
 				while ((count = in.read(data)) != -1) {
 					out.write(data, 0, count);
@@ -433,15 +400,10 @@ public class ContentGrabberService extends IntentService {
 
 				music.musicName = obj.getString(Config.TAG_MUSIC_NAME);
 				String musicFilename = obj.getString(Config.TAG_MUSIC_PATH);
-				musicFilename = musicFilename.replace(" ", "_");
+//				musicFilename = musicFilename.replace(" ", "_");
 				music.musicPath = musicFilename;
 
 				Queries.InsertMusic(sqliteDB, handler, music);
-			}
-
-			ArrayList<MusicModel> music = Queries.getMusic(sqliteDB, handler);
-			for (MusicModel item : music) {
-				Log.e("MUSIC", item.getMusicName());
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage()
@@ -452,19 +414,19 @@ public class ContentGrabberService extends IntentService {
 	private void obtainMusicFile() {
 
 		try {
-			String urlMusic = Config.MUSIC_FILENAME.replace("_", "%20");
+//			String urlMusic = Config.MUSIC_FILENAME.replace("_", "%20");
 			URL url = new URL(Config.MUSIC_BASE_URL + "/"
-					+ urlMusic);
+					+ Config.MUSIC_FILENAME);
 			URLConnection connection = url.openConnection();
 			connection.connect();
 
 			InputStream in = url.openStream();
 
-			File file = new File(Config.EXTERNAL_FOLDER + "/music_file");
+			File file = new File(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_MUSIC);
 			file.mkdirs();
 
 			OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
-					+ "/music_file/" + Config.MUSIC_FILENAME);
+					+ "/" + Config.EXTERNAL_FOLDER_MUSIC + "/" + Config.MUSIC_FILENAME);
 			byte data[] = new byte[1024];
 			int count = 0;
 			while ((count = in.read(data)) != -1) {
@@ -496,11 +458,6 @@ public class ContentGrabberService extends IntentService {
 				other.otherUsrId = obj.getString(Config.TAG_OTHER_USR_ID);
 
 				Queries.InsertOther(sqliteDB, handler, other);
-			}
-
-			ArrayList<OtherModel> other = Queries.getOther(sqliteDB, handler);
-			for (OtherModel item : other) {
-				Log.e("OTHER", item.getOtherTitle());
 			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage()

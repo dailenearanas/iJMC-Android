@@ -1,5 +1,6 @@
 package com.android.ijmc.adapters;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -72,7 +73,8 @@ public class SealListAdapter extends BaseAdapter{
 			protected Bitmap doInBackground(ViewHolder... params) {
 				// TODO Auto-generated method stub
 				v = params[0];
-				Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/seal_images/" + items.get(pos).getSealImg());
+				File imageName = new File(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_SEAL_IMAGE + "/" + items.get(pos).getSealImg());
+				Bitmap bmp = BitmapFactory.decodeFile(imageName.getAbsolutePath());
 				return bmp;
 			}
 

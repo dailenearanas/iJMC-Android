@@ -274,7 +274,10 @@ public class Queries {
 				facultyModel.facultyDeptId = mCursor.getString(10)+"-"+mCursor.getString(8);
 				facultyModel.facultyPositionId = mCursor.getString(11);
 				
-				if(!mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school department") && !mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school department") && tag.toLowerCase(Locale.getDefault()).equals("college")) {
+				if(!mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school department")
+						&& !mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school department")
+						&& !mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("administration")
+						&& tag.toLowerCase(Locale.getDefault()).equals("college")) {
 					models.add(facultyModel);
 				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school department") && tag.toLowerCase(Locale.getDefault()).equals("high school")) {
 					models.add(facultyModel);
@@ -553,7 +556,6 @@ public class Queries {
 
 	public static void InsertStudents(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, StudentModel studentModel) {
-		Log.e("INSERTING STUDENTS", "##COMMENT##");
 		sqLiteDB = dbHandler.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -569,7 +571,6 @@ public class Queries {
 
 	public static void InsertContent(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, ContentModel content) {
-		Log.e("INSERTING CONTENT", "##COMMENT##");
 
 		sqLiteDB = dbHandler.getWritableDatabase();
 
@@ -584,7 +585,6 @@ public class Queries {
 
 	public static void InsertFaculty(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, FacultyModel faculty) {
-		Log.e("INSERTING FACULTY", "##COMMENT##");
 
 		sqLiteDB = dbHandler.getWritableDatabase();
 
@@ -605,7 +605,6 @@ public class Queries {
 
 	public static void InsertDepartment(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, DepartmentModel department) {
-		Log.e("INSERTING DEPARTMENT", "##COMMENT##");
 		sqLiteDB = dbHandler.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -620,7 +619,6 @@ public class Queries {
 
 	public static void InsertCourse(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, CourseModel course) {
-		Log.e("INSERTING COURSES", "##COMMENT##");
 		sqLiteDB = dbHandler.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -634,7 +632,6 @@ public class Queries {
 
 	public static void InsertPosition(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, PositionModel position) {
-		Log.e("INSERTING POSITION", "##COMMENT##");
 		sqLiteDB = dbHandler.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -647,7 +644,6 @@ public class Queries {
 
 	public static void InsertSSG(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, SSGModel ssg) {
-		Log.e("INSERTING SSG", "##COMMENT##");
 		sqLiteDB = dbHandler.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -665,7 +661,6 @@ public class Queries {
 
 	public static void InsertSeal(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, SealsModel seal) {
-		Log.e("INSERTING SEAL", "##COMMENT##");
 		sqLiteDB = dbHandler.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -679,7 +674,6 @@ public class Queries {
 
 	public static void InsertMusic(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, MusicModel music) {
-		Log.e("INSERTING MUSIC", "##COMMENT##");
 		sqLiteDB = dbHandler.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -692,7 +686,6 @@ public class Queries {
 
 	public static void InsertOther(SQLiteDatabase sqLiteDB,
 			DatabaseHandler dbHandler, OtherModel other) {
-		Log.e("INSERTING OTHER CONTENTS", "##COMMENT##");
 		sqLiteDB = dbHandler.getWritableDatabase();
 
 		ContentValues values = new ContentValues();

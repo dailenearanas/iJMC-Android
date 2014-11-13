@@ -145,7 +145,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 		spEditor.putString(Config.SHA_USR_LNAME, jsonObject.getString("stud_lname"));
 		spEditor.putString(Config.SHA_USR_DEPT_ID, jsonObject.getString("dept_id"));
 		String imageFile = jsonObject.getString("image_path");
-		imageFile = imageFile.replace(" ", "_");
+//		imageFile = imageFile.replace(" ", "_");
 		spEditor.putString(Config.SHA_USR_IMAGE_FILE, imageFile);
 		spEditor.putString(Config.SHA_USR_TYPE, "Student");
 		spEditor.putBoolean(Config.SHA_LOGGED_IN, true);
@@ -164,7 +164,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 		spEditor.putString(Config.SHA_USR_DEPT_ID, jsonObject.getString("dept_id"));
 		spEditor.putString(Config.SHA_USR_POS_ID, jsonObject.getString("pos"));
 		String imageFile = jsonObject.getString("image_path");
-		imageFile = imageFile.replace(" ", "_");
+//		imageFile = imageFile.replace(" ", "_");
 		spEditor.putString(Config.SHA_USR_IMAGE_FILE, imageFile);
 		spEditor.putString(Config.SHA_USR_TYPE, "Faculty");
 		spEditor.putBoolean(Config.SHA_LOGGED_IN, true);

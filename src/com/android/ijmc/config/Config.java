@@ -12,7 +12,7 @@ public class Config {
     
     public static int TIMEOUT = 10000;
     
-    public static String HOST_NAME = "http://192.168.56.1";
+    public static String HOST_NAME = "http://192.168.2.183";
     
     public static String FOLDER_NAME = "ijmc3";
     
@@ -33,6 +33,14 @@ public class Config {
     public static String MUSIC_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/music_files";
     
     public static String EXTERNAL_FOLDER = Environment.getExternalStorageDirectory() + "/.ijmc";
+    
+    public static String EXTERNAL_FOLDER_DEPT_IMAGE = "dept_image";
+    
+    public static String EXTERNAL_FOLDER_FACULTY_IMAGE = "faculty_image";
+    
+    public static String EXTERNAL_FOLDER_MUSIC = "music_file";
+    
+    public static String EXTERNAL_FOLDER_SEAL_IMAGE = "seal_image";
     
     public static String MUSIC_FILENAME = "JMC_HYMN.mp3"; //TODO: replace all spaces with '_'
     
