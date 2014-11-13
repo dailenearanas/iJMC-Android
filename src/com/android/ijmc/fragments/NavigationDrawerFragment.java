@@ -443,13 +443,15 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 			int count;
 			try {
 				imageName = arg0[0];
+				arg0[0] = arg0[0].replace("_", "%20");
+				
 				URL url = null;
 				if(sp.getString(Config.SHA_USR_TYPE, "").equals("Student")) {
 					url = new URL(Config.IMAGE_STUDENT_BASE_URL + "/" + arg0[0]);
 					Log.e("URL PATH", Config.IMAGE_STUDENT_BASE_URL + "/" + arg0[0]);
 				} else {
-					url = new URL(Config.IMAGE_FACULTY_BASE_URL + "/" + arg0[0]);
-					Log.e("URL PATH", Config.IMAGE_FACULTY_BASE_URL + "/" + arg0[0]);
+					url = new URL(Config.IMAGE_FACULTY_BASE_URL + "/thumb/" + arg0[0]);
+					Log.e("URL PATH", Config.IMAGE_FACULTY_BASE_URL + "/thumb/" + arg0[0]);
 				}
 				URLConnection connection = url.openConnection();
 				connection.connect();
@@ -461,10 +463,10 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 				imageCache.mkdir();
 
 				OutputStream out = new FileOutputStream(getActivity()
-						.getCacheDir() + "/images/" + arg0[0]);
+						.getCacheDir() + "/images/" + imageName);
 				
 				Log.e("IMAGE CACHE PATH", getActivity()
-						.getCacheDir() + "/images/" + arg0[0]);
+						.getCacheDir() + "/images/" + imageName);
 
 				byte data[] = new byte[2048];
 				while ((count = in.read(data)) != -1) {

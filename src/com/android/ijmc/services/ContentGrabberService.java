@@ -35,9 +35,9 @@ import com.android.ijmc.models.PositionModel;
 import com.android.ijmc.models.SSGModel;
 import com.android.ijmc.models.SealsModel;
 
-public class ContentGrabberService extends IntentService{
-	
-	public static final String PARAM_SRC = "url_src"; 
+public class ContentGrabberService extends IntentService {
+
+	public static final String PARAM_SRC = "url_src";
 
 	public ContentGrabberService() {
 		// TODO Auto-generated constructor stub
@@ -49,93 +49,116 @@ public class ContentGrabberService extends IntentService{
 		// TODO Auto-generated method stub
 		ArrayList<String> urls = intent.getStringArrayListExtra(PARAM_SRC);
 		ServiceHandler requestHandler = new ServiceHandler();
-		for(String url : urls){
-			String response = requestHandler.makeServiceCall(url, ServiceHandler.GET);
-			String sourceFile = url.substring(url.lastIndexOf('/')+1, url.length()-5);
-			if(sourceFile.equals(Config.CONTENT_JSON.substring(0, Config.CONTENT_JSON.length()-5))) {
+		for (String url : urls) {
+			String response = requestHandler.makeServiceCall(url,
+					ServiceHandler.GET);
+			String sourceFile = url.substring(url.lastIndexOf('/') + 1,
+					url.length() - 5);
+			if (sourceFile.equals(Config.CONTENT_JSON.substring(0,
+					Config.CONTENT_JSON.length() - 5))) {
 				forContent(response);
-			} else if(sourceFile.equals(Config.DEPARTMENT_JSON.substring(0, Config.DEPARTMENT_JSON.length()-5))) {
+			} else if (sourceFile.equals(Config.DEPARTMENT_JSON.substring(0,
+					Config.DEPARTMENT_JSON.length() - 5))) {
 				forDepartment(response);
 				obtainDepartmentImages();
-			} else if(sourceFile.equals(Config.COURSE_JSON.substring(0, Config.COURSE_JSON.length()-5))) {
+			} else if (sourceFile.equals(Config.COURSE_JSON.substring(0,
+					Config.COURSE_JSON.length() - 5))) {
 				forCourse(response);
-			} else if(sourceFile.equals(Config.FACULTY_JSON.substring(0, Config.FACULTY_JSON.length()-5))) {
+			} else if (sourceFile.equals(Config.FACULTY_JSON.substring(0,
+					Config.FACULTY_JSON.length() - 5))) {
 				forFaculty(response);
 				obtainFacultyImages();
-			} else if(sourceFile.equals(Config.POSITION_JSON.substring(0, Config.POSITION_JSON.length()-5))) {
+			} else if (sourceFile.equals(Config.POSITION_JSON.substring(0,
+					Config.POSITION_JSON.length() - 5))) {
 				forPosition(response);
-			} else if(sourceFile.equals(Config.SSG_JSON.substring(0, Config.SSG_JSON.length()-5))) {
+			} else if (sourceFile.equals(Config.SSG_JSON.substring(0,
+					Config.SSG_JSON.length() - 5))) {
 				forSSG(response);
-			} else if(sourceFile.equals(Config.SEALS_JSON.substring(0, Config.SEALS_JSON.length()-5))) {
+			} else if (sourceFile.equals(Config.SEALS_JSON.substring(0,
+					Config.SEALS_JSON.length() - 5))) {
 				forSeals(response);
 				obtainSealImages();
-			} else if(sourceFile.equals(Config.MUSIC_JSON.substring(0, Config.MUSIC_JSON.length()-5))) {
+			} else if (sourceFile.equals(Config.MUSIC_JSON.substring(0,
+					Config.MUSIC_JSON.length() - 5))) {
 				forMusic(response);
 				obtainMusicFile();
-			} else if(sourceFile.equals(Config.OTHER_JSON.substring(0, Config.OTHER_JSON.length()-5))) {
+			} else if (sourceFile.equals(Config.OTHER_JSON.substring(0,
+					Config.OTHER_JSON.length() - 5))) {
 				forOther(response);
 			}
 		}
-		
+
 		Intent broadcastIntent = new Intent();
-		broadcastIntent.setAction(LoginActivity.ResponseReceiver.ACTION_RESPONSE);
+		broadcastIntent
+				.setAction(LoginActivity.ResponseReceiver.ACTION_RESPONSE);
 		broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
 		sendBroadcast(broadcastIntent);
 	}
-	
-	private void forDepartment(String response){
+
+	private void forDepartment(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				DepartmentModel singleContent = new DepartmentModel();
-				singleContent.deptId = Integer.parseInt(obj.getString(Config.TAG_DEPT_ID));
+				singleContent.deptId = Integer.parseInt(obj
+						.getString(Config.TAG_DEPT_ID));
 				singleContent.deptTitle = obj.getString(Config.TAG_DEPT_TITLE);
 				singleContent.deptDesc = obj.getString(Config.TAG_DEPT_DESC);
-				
+
 				String imagePath = obj.getString(Config.TAG_DEPT_IMAGEPATH);
-				if(imagePath == null) {
+
+				if (imagePath == null) {
 					imagePath = "";
+				} else {
+					imagePath = imagePath.replace(" ", "_");
 				}
+
 				singleContent.img_path = imagePath;
-				
+
 				Queries.InsertDepartment(sqliteDB, handler, singleContent);
 			}
-			
+
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
-	
+
 	private void obtainDepartmentImages() {
-		DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+		DatabaseHandler handler = new DatabaseHandler(
+				this.getApplicationContext());
 		SQLiteDatabase sqliteDB = handler.getReadableDatabase();
-		List<String> deptImages = Queries.getDepartmentImages(sqliteDB, handler);
-		for(String image : deptImages) {
+		List<String> deptImages = Queries
+				.getDepartmentImages(sqliteDB, handler);
+		for (String image : deptImages) {
 			int count = 0;
 			Log.e("SOURCE", Config.IMAGE_DEPARTMENT_BASE_URL + "/" + image);
 			URL url;
 			try {
-				url = new URL(Config.IMAGE_DEPARTMENT_BASE_URL + "/" + image);
+				String urlImage = image.replace("_", "%20");
+				url = new URL(Config.IMAGE_DEPARTMENT_BASE_URL + "/" + urlImage);
 				URLConnection connection = url.openConnection();
 				connection.connect();
-				
+
 				InputStream in = new BufferedInputStream(url.openStream());
-				
+
 				File imageDir = new File(Config.EXTERNAL_FOLDER + "/dept_image");
 				imageDir.mkdirs();
-				
-				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER + "/dept_image/" + image);
+
+				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
+						+ "/dept_image/" + image);
 				byte[] data = new byte[1024];
-				while((count = in.read(data)) != -1) {
-					out.write(data,0,count);
+				while ((count = in.read(data)) != -1) {
+					out.write(data, 0, count);
 				}
 				out.flush();
 				out.close();
 				in.close();
-				
+
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -146,35 +169,39 @@ public class ContentGrabberService extends IntentService{
 		}
 	}
 
-	private void forContent(String response){
+	private void forContent(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				ContentModel content = new ContentModel();
 				content.contentId = obj.getString(Config.TAG_CONTENT_ID);
 				content.contentType = obj.getString(Config.TAG_CONTENT_TYPE);
-				content.contentBody = obj.getString(Config.TAG_CONTENT_BODY);				
+				content.contentBody = obj.getString(Config.TAG_CONTENT_BODY);
 				Queries.InsertContent(sqliteDB, handler, content);
 			}
-			
-			ArrayList<ContentModel> contents = Queries.getContents(sqliteDB, handler);
-			for(ContentModel item: contents) {
+
+			ArrayList<ContentModel> contents = Queries.getContents(sqliteDB,
+					handler);
+			for (ContentModel item : contents) {
 				Log.e("CONTENT", item.getContentType());
 			}
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
-	
-	private void forCourse(String response){
+
+	private void forCourse(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				CourseModel course = new CourseModel();
 				course.courseId = obj.getString(Config.TAG_COURSE_ID);
@@ -183,111 +210,131 @@ public class ContentGrabberService extends IntentService{
 				course.deptId = obj.getInt(Config.TAG_COURSE_DEPT_ID);
 				Queries.InsertCourse(sqliteDB, handler, course);
 			}
-			
-			ArrayList<CourseModel> course = Queries.getCourses(sqliteDB, handler);
-			for(CourseModel item: course) {
+
+			ArrayList<CourseModel> course = Queries.getCourses(sqliteDB,
+					handler);
+			for (CourseModel item : course) {
 				Log.e("COURSE", item.getCourseTitle());
 			}
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
-	
-	private void forFaculty(String response){
+
+	private void forFaculty(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
-				FacultyModel faculty = new FacultyModel();				
+				FacultyModel faculty = new FacultyModel();
 				faculty.facultyId = obj.getString(Config.TAG_FACULTY_ID);
 				faculty.facultyFname = obj.getString(Config.TAG_FACULTY_FNAME);
 				faculty.facultyMname = obj.getString(Config.TAG_FACULTY_MNAME);
 				faculty.facultyLname = obj.getString(Config.TAG_FACULTY_LNAME);
 				faculty.facultySfx = obj.getString(Config.TAG_FACULTY_SFX);
-				faculty.facultyGender = obj.getString(Config.TAG_FACULTY_GENDER);
-				faculty.facultyImagePath = obj.getString(Config.TAG_FACULTY_IMAGE);
+				faculty.facultyGender = obj
+						.getString(Config.TAG_FACULTY_GENDER);
+				String imageFilename = obj.getString(Config.TAG_FACULTY_IMAGE);
+				imageFilename = imageFilename.replace(" ", "_");
+				faculty.facultyImagePath = imageFilename;
 				faculty.facultyDeptId = obj.getString(Config.TAG_FACULTY_DEPT);
-				faculty.facultyPositionId = obj.getString(Config.TAG_FACULTY_POSITION);
-				
+				faculty.facultyPositionId = obj
+						.getString(Config.TAG_FACULTY_POSITION);
+
 				Queries.InsertFaculty(sqliteDB, handler, faculty);
 			}
-			
-			ArrayList<FacultyModel> faculty = Queries.getFaculty(sqliteDB, handler);
-			for(FacultyModel item: faculty) {
+
+			ArrayList<FacultyModel> faculty = Queries.getFaculty(sqliteDB,
+					handler);
+			for (FacultyModel item : faculty) {
 				Log.e("FACULTY", item.getFacultyId());
 			}
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
-	
+
 	private void obtainFacultyImages() {
-		DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+		DatabaseHandler handler = new DatabaseHandler(
+				this.getApplicationContext());
 		SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 		List<String> fimages = Queries.getFacultyImages(sqliteDB, handler);
-		
-		for(String image : fimages) {
+
+		for (String image : fimages) {
 			try {
 				int count = 0;
-				Log.e("SOURCE", Config.IMAGE_FACULTY_BASE_URL + "/" + image);
-				URL url = new URL(Config.IMAGE_FACULTY_BASE_URL + "/" + image);
-				
+				String urlImage = image.replace("_", "%20");
+				Log.e("SOURCE", Config.IMAGE_FACULTY_BASE_URL + "/" + urlImage);
+				URL url = new URL(Config.IMAGE_FACULTY_BASE_URL + "/thumb/"
+						+ urlImage);
+
 				URLConnection connection = url.openConnection();
 				connection.connect();
-				
+
 				InputStream in = new BufferedInputStream(url.openStream());
-				
-				File imageDir = new File(Config.EXTERNAL_FOLDER + "/faculty_images");
+
+				File imageDir = new File(Config.EXTERNAL_FOLDER
+						+ "/faculty_images");
 				imageDir.mkdirs();
-				
-				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER + "/faculty_images/" + image);
+
+				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
+						+ "/faculty_images/" + image);
 				byte[] data = new byte[1024];
-				while((count = in.read(data)) != -1) {
-					out.write(data,0,count);
+				while ((count = in.read(data)) != -1) {
+					out.write(data, 0, count);
 				}
 				out.flush();
 				out.close();
 				in.close();
-				
-			} catch(IOException e) {
-				Log.e("FACULTY IMAGES DOWNLOAD ERROR", e.getMessage().toString());
+
+			} catch (IOException e) {
+				Log.e("FACULTY IMAGES DOWNLOAD ERROR", e.getMessage()
+						.toString());
 			}
 		}
 	}
-	
-	private void forPosition(String response){
+
+	private void forPosition(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
-				PositionModel position = new PositionModel();								
+				PositionModel position = new PositionModel();
 				position.positionId = obj.getString(Config.TAG_POSITION_ID);
-				position.positionTitle = obj.getString(Config.TAG_POSITION_TITLE);
-				
+				position.positionTitle = obj
+						.getString(Config.TAG_POSITION_TITLE);
+
 				Queries.InsertPosition(sqliteDB, handler, position);
 			}
-			
-			ArrayList<PositionModel> position = Queries.getPositions(sqliteDB, handler);
-			for(PositionModel item: position) {
+
+			ArrayList<PositionModel> position = Queries.getPositions(sqliteDB,
+					handler);
+			for (PositionModel item : position) {
 				Log.e("POSITION", item.getPositionTitle());
 			}
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
-	
-	private void forSSG(String response){
+
+	private void forSSG(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
-				SSGModel ssg = new SSGModel();												
+				SSGModel ssg = new SSGModel();
 				ssg.ssgFname = obj.getString(Config.TAG_SSG_FNAME);
 				ssg.ssgMname = obj.getString(Config.TAG_SSG_MNAME);
 				ssg.ssgLname = obj.getString(Config.TAG_SSG_LNAME);
@@ -295,156 +342,169 @@ public class ContentGrabberService extends IntentService{
 				ssg.ssgLevel = obj.getString(Config.TAG_SSG_LEVEL);
 				ssg.ssgCrsId = obj.getInt(Config.TAG_SSG_CRS_ID);
 				ssg.ssgPosId = obj.getInt(Config.TAG_SSG_POS_ID);
-				
+
 				Queries.InsertSSG(sqliteDB, handler, ssg);
 			}
-			
+
 			ArrayList<SSGModel> ssg = Queries.getSSG(sqliteDB, handler);
-			for(SSGModel item: ssg) {
+			for (SSGModel item : ssg) {
 				Log.e("SSG", item.getSsgLname());
 			}
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
-	
-	private void forSeals(String response){
+
+	private void forSeals(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				SealsModel seal = new SealsModel();
-				seal.sealImg = obj.getString(Config.TAG_SEAL_IMAGE);
+				String imageFilename = obj.getString(Config.TAG_SEAL_IMAGE);
+				imageFilename = imageFilename.replace(" ", "_");
+				seal.sealImg = imageFilename;
 				seal.sealName = obj.getString(Config.TAG_SEAL_NAME);
 				seal.sealDesc = obj.getString(Config.TAG_SEAL_DESC);
-				
+
 				Queries.InsertSeal(sqliteDB, handler, seal);
 			}
-			
+
 			ArrayList<SealsModel> seal = Queries.getSeals(sqliteDB, handler);
-			for(SealsModel item: seal) {
+			for (SealsModel item : seal) {
 				Log.e("SEAL", item.getSealName());
 			}
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
-	
+
 	private void obtainSealImages() {
-		DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+		DatabaseHandler handler = new DatabaseHandler(
+				this.getApplicationContext());
 		SQLiteDatabase sqliteDB = handler.getReadableDatabase();
 		List<String> simages = Queries.getSealImagePath(sqliteDB, handler);
-		for(String image : simages) {
+		for (String image : simages) {
 			try {
 				int count = 0;
-				Log.e("SOURCE", Config.IMAGE_SEAL_BASE_URL + "/" + image);
-				URL url = new URL(Config.IMAGE_SEAL_BASE_URL + "/" + image);
-				
+				String urlImage = image.replace("_", "%20");
+				Log.e("SOURCE", Config.IMAGE_SEAL_BASE_URL + "/" + urlImage);
+				URL url = new URL(Config.IMAGE_SEAL_BASE_URL + "/" + urlImage);
+
 				URLConnection connection = url.openConnection();
 				connection.connect();
-				
+
 				InputStream in = new BufferedInputStream(url.openStream());
-				
-				File imageDir = new File(Config.EXTERNAL_FOLDER + "/seal_images");
+
+				File imageDir = new File(Config.EXTERNAL_FOLDER
+						+ "/seal_images");
 				imageDir.mkdirs();
-				
-				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER + "/seal_images/" + image);
+
+				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
+						+ "/seal_images/" + image);
 				byte[] data = new byte[1024];
-				while((count = in.read(data)) != -1) {
-					out.write(data,0,count);
+				while ((count = in.read(data)) != -1) {
+					out.write(data, 0, count);
 				}
 				out.flush();
 				out.close();
 				in.close();
-				
-			} catch(IOException e) {
+
+			} catch (IOException e) {
 				Log.e("SEAL IMAGES DOWNLOAD ERROR", e.getMessage().toString());
 			}
 		}
 	}
-	
-	private void forMusic(String response){
+
+	private void forMusic(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				MusicModel music = new MusicModel();
-				
+
 				music.musicName = obj.getString(Config.TAG_MUSIC_NAME);
-				music.musicPath = obj.getString(Config.TAG_MUSIC_PATH);
-				
+				String musicFilename = obj.getString(Config.TAG_MUSIC_PATH);
+				musicFilename = musicFilename.replace(" ", "_");
+				music.musicPath = musicFilename;
+
 				Queries.InsertMusic(sqliteDB, handler, music);
 			}
-			
+
 			ArrayList<MusicModel> music = Queries.getMusic(sqliteDB, handler);
-			for(MusicModel item: music) {
+			for (MusicModel item : music) {
 				Log.e("MUSIC", item.getMusicName());
 			}
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
-	
-		private void obtainMusicFile() {
-		/*DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
-		SQLiteDatabase sqliteDB = handler.getReadableDatabase();*/
-		
+
+	private void obtainMusicFile() {
+
 		try {
-			
-			URL url = new URL(Config.MUSIC_BASE_URL + "/" + Config.MUSIC_FILENAME);
+			String urlMusic = Config.MUSIC_FILENAME.replace("_", "%20");
+			URL url = new URL(Config.MUSIC_BASE_URL + "/"
+					+ urlMusic);
 			URLConnection connection = url.openConnection();
 			connection.connect();
-			
+
 			InputStream in = url.openStream();
-			
+
 			File file = new File(Config.EXTERNAL_FOLDER + "/music_file");
-			Log.e("IS DIRECTORY", file.isDirectory()+"");
-			Log.e("IS FILE", file.isFile()+"");
 			file.mkdirs();
-			
-			OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER + "/music_file/" + Config.MUSIC_FILENAME);
+
+			OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
+					+ "/music_file/" + Config.MUSIC_FILENAME);
 			byte data[] = new byte[1024];
 			int count = 0;
-			while((count = in.read(data)) != -1) {
+			while ((count = in.read(data)) != -1) {
 				out.write(data, 0, count);
 			}
-			
+
 			out.flush();
 			out.close();
 			in.close();
-			
+
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private void forOther(String response){
+
+	private void forOther(String response) {
 		try {
-			DatabaseHandler handler = new DatabaseHandler(this.getApplicationContext());
+			DatabaseHandler handler = new DatabaseHandler(
+					this.getApplicationContext());
 			SQLiteDatabase sqliteDB = handler.getWritableDatabase();
 			JSONArray jsonArray = new JSONArray(response);
-			for(int i=0;i<jsonArray.length();i++) {
+			for (int i = 0; i < jsonArray.length(); i++) {
 				JSONObject obj = jsonArray.getJSONObject(i);
 				OtherModel other = new OtherModel();
 				other.otherTitle = obj.getString(Config.TAG_OTHER_TITLE);
 				other.otherBody = obj.getString(Config.TAG_OTHER_BODY);
 				other.otherUsrId = obj.getString(Config.TAG_OTHER_USR_ID);
-				
+
 				Queries.InsertOther(sqliteDB, handler, other);
 			}
-			
+
 			ArrayList<OtherModel> other = Queries.getOther(sqliteDB, handler);
-			for(OtherModel item: other) {
+			for (OtherModel item : other) {
 				Log.e("OTHER", item.getOtherTitle());
 			}
 		} catch (Exception e) {
-			Log.e(ContentGrabberService.class.toString(), e.getMessage().toString());
+			Log.e(ContentGrabberService.class.toString(), e.getMessage()
+					.toString());
 		}
 	}
 }

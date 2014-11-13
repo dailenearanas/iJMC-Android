@@ -12,9 +12,9 @@ public class Config {
     
     public static int TIMEOUT = 10000;
     
-    public static String HOST_NAME = "http://192.168.43.74";
+    public static String HOST_NAME = "http://192.168.56.1";
     
-    public static String FOLDER_NAME = "ijmc-temp";
+    public static String FOLDER_NAME = "ijmc3";
     
     public static String BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public";
     
@@ -34,7 +34,7 @@ public class Config {
     
     public static String EXTERNAL_FOLDER = Environment.getExternalStorageDirectory() + "/.ijmc";
     
-    public static String MUSIC_FILENAME = "Luther_Vandross_The_Closer_I_Get_To_You.mp3";
+    public static String MUSIC_FILENAME = "JMC_HYMN.mp3"; //TODO: replace all spaces with '_'
     
 
     

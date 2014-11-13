@@ -274,11 +274,13 @@ public class Queries {
 				facultyModel.facultyDeptId = mCursor.getString(10)+"-"+mCursor.getString(8);
 				facultyModel.facultyPositionId = mCursor.getString(11);
 				
-				if(!mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school") && !mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school") && tag.toLowerCase(Locale.getDefault()).equals("college")) {
+				if(!mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school department") && !mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school department") && tag.toLowerCase(Locale.getDefault()).equals("college")) {
 					models.add(facultyModel);
-				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school") && tag.toLowerCase(Locale.getDefault()).equals("high school")) {
+				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school department") && tag.toLowerCase(Locale.getDefault()).equals("high school")) {
 					models.add(facultyModel);
-				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school") && tag.toLowerCase(Locale.getDefault()).equals("grade school")) {
+				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school department") && tag.toLowerCase(Locale.getDefault()).equals("grade school")) {
+					models.add(facultyModel);
+				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("administration") && tag.toLowerCase(Locale.getDefault()).equals("administration")) {
 					models.add(facultyModel);
 				}
 			} while (mCursor.moveToNext());

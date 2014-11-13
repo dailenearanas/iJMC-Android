@@ -37,7 +37,7 @@ public class FacultyFragmentPagerAdapter extends FragmentStatePagerAdapter{
 	}
 	
 	public static String[] getTitles() {
-		return new String[]{"College Department","HighSchool Department", "GradeSchool Department"};
+		return new String[]{"College Department","High School Department", "Grade School Department"};
 	}
 	
 	

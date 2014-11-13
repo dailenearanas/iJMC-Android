@@ -2,13 +2,12 @@ package com.android.ijmc.adapters;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,12 @@ public class FacultyCollegeListAdapter extends BaseAdapter implements StickyList
 			protected Bitmap doInBackground(ViewHolder... params) {
 				// TODO Auto-generated method stub
 				v = params[0];
-				Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/" + item.getFacultyImagePath());
+				String imageSource = item.getFacultyImagePath().replace(" ", "\\ ");
+				Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/" + imageSource);
+				if(bmp == null) {
+					bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/user.png");
+				}
+				Log.e("FACULTY IMAGE SOURCE", Config.EXTERNAL_FOLDER + "/faculty_images/" + imageSource);
 				return Utilities.getRoundedRectBitmap(bmp, 100);
 			}
 

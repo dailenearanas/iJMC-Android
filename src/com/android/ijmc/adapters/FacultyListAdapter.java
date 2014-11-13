@@ -75,6 +75,9 @@ public class FacultyListAdapter extends BaseAdapter{
 				// TODO Auto-generated method stub
 				v = params[0];
 				Bitmap bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/" + item.getFacultyImagePath());
+				if(bmp == null) {
+					bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/faculty_images/user.png");
+				}
 				return Utilities.getRoundedRectBitmap(bmp, 100);
 			}
 
