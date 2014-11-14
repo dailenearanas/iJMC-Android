@@ -38,12 +38,13 @@ import com.android.ijmc.models.SealsModel;
 public class ContentGrabberService extends IntentService {
 
 	public static final String PARAM_SRC = "url_src";
-
+	public static final String PARAM_METHOD = "method";
+	
 	public ContentGrabberService() {
 		// TODO Auto-generated constructor stub
 		super("ContentGrabberService");
 	}
-
+	
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		// TODO Auto-generated method stub
@@ -56,41 +57,49 @@ public class ContentGrabberService extends IntentService {
 					url.length() - 5);
 			if (sourceFile.equals(Config.CONTENT_JSON.substring(0,
 					Config.CONTENT_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","Content");
 				forContent(response);
 			} else if (sourceFile.equals(Config.DEPARTMENT_JSON.substring(0,
 					Config.DEPARTMENT_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","Department");
 				forDepartment(response);
 				obtainDepartmentImages();
 			} else if (sourceFile.equals(Config.COURSE_JSON.substring(0,
 					Config.COURSE_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","Course");
 				forCourse(response);
 			} else if (sourceFile.equals(Config.FACULTY_JSON.substring(0,
 					Config.FACULTY_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","Faculty");
 				forFaculty(response);
 				obtainFacultyImages();
 			} else if (sourceFile.equals(Config.POSITION_JSON.substring(0,
 					Config.POSITION_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","Position");
 				forPosition(response);
 			} else if (sourceFile.equals(Config.SSG_JSON.substring(0,
 					Config.SSG_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","SSG");
 				forSSG(response);
 			} else if (sourceFile.equals(Config.SEALS_JSON.substring(0,
 					Config.SEALS_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","Seals");
 				forSeals(response);
 				obtainSealImages();
 			} else if (sourceFile.equals(Config.MUSIC_JSON.substring(0,
 					Config.MUSIC_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","Music");
 				forMusic(response);
 				obtainMusicFile();
 			} else if (sourceFile.equals(Config.OTHER_JSON.substring(0,
 					Config.OTHER_JSON.length() - 5))) {
+				Log.e("ContentGrabberService","Other");
 				forOther(response);
 			}
 		}
-
+		
 		Intent broadcastIntent = new Intent();
-		broadcastIntent
-				.setAction(LoginActivity.ResponseReceiver.ACTION_RESPONSE);
+		broadcastIntent.setAction(LoginActivity.ResponseReceiver.ACTION_RESPONSE);
 		broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
 		sendBroadcast(broadcastIntent);
 	}
@@ -164,6 +173,9 @@ public class ContentGrabberService extends IntentService {
 				e.printStackTrace();
 			}
 		}
+		
+		handler.close();
+		sqliteDB.close();
 	}
 
 	private void forContent(String response) {

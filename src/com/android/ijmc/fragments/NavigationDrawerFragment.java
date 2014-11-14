@@ -204,7 +204,7 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 			imageCache.delete();
 			
 			File externalFiles = new File(Config.EXTERNAL_FOLDER);
-			recursiveDelete(externalFiles);
+			Utilities.recursiveDelete(externalFiles);
 			
 			DatabaseHandler handler = new DatabaseHandler(getActivity());
 			SQLiteDatabase sqliteDb = null;
@@ -214,20 +214,6 @@ public class NavigationDrawerFragment extends Fragment implements OnClickListene
 			startActivity(intent);
 			getActivity().finish();
 		break;
-		}
-	}
-	
-	private void recursiveDelete(File dir) {
-		if(dir.isFile()) {
-			dir.delete();
-		} else {
-			String[] files = dir.list();
-			if(files.length > 0) {
-				for(int i=0;i<files.length;i++) {
-					recursiveDelete(new File(dir.getAbsolutePath() + "/" + files[i]));
-				}
-				dir.delete();
-			}
 		}
 	}
 

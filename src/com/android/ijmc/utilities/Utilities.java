@@ -160,5 +160,19 @@ public class Utilities {
 		
 		return view;
 	}
+	
+	public static void recursiveDelete(File dir) {
+		if(dir.isFile()) {
+			dir.delete();
+		} else {
+			String[] files = dir.list();
+			if(files.length > 0) {
+				for(int i=0;i<files.length;i++) {
+					recursiveDelete(new File(dir.getAbsolutePath() + "/" + files[i]));
+				}
+				dir.delete();
+			}
+		}
+	}
 
 }

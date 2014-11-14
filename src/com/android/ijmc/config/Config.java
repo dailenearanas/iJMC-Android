@@ -12,7 +12,7 @@ public class Config {
     
     public static int TIMEOUT = 10000;
     
-    public static String HOST_NAME = "http://192.168.2.183";
+    public static String HOST_NAME = "http://192.168.56.1";
     
     public static String FOLDER_NAME = "ijmc3";
     
@@ -229,5 +229,20 @@ public class Config {
         jsonUrls.add(JSON_URL + "/" + SSG_JSON);//with model
         jsonUrls.add(JSON_URL + "/" + SEALS_JSON);//with model
         return jsonUrls;
+    }
+    
+    public static ArrayList<String> getRequests(){
+    	ArrayList<String> urls = new ArrayList<String>();
+		urls.add(Config.JSON_URL + "/" + Config.CONTENT_JSON);
+		urls.add(Config.JSON_URL + "/" + Config.DEPARTMENT_JSON);
+		urls.add(Config.JSON_URL + "/" + Config.COURSE_JSON);
+		urls.add(Config.JSON_URL + "/" + Config.FACULTY_JSON);
+		urls.add(Config.JSON_URL + "/" + Config.POSITION_JSON);
+		urls.add(Config.JSON_URL + "/" + Config.SSG_JSON);
+		urls.add(Config.JSON_URL + "/" + Config.SEALS_JSON);
+		urls.add(Config.JSON_URL + "/" + Config.MUSIC_JSON);
+		urls.add(Config.JSON_URL + "/" + Config.OTHER_JSON);
+		
+		return urls;
     }
 }

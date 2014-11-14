@@ -210,12 +210,6 @@ public class LoginActivity extends Activity implements OnClickListener{
 			
 			String response = LoginActivity.this.serviceHandler.makeServiceCall(params[0], 1);
 			
-			/*if(response == null) {
-				Log.e("LOGIN RESPONSE", "Error in Response");
-			} else {
-				Log.e("LOGIN RESPONSE", response.toString());
-			}*/
-			
 			return response;
 		}
 
@@ -239,18 +233,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 						
 						prepareDialog.show();
 						Intent contentGrabber = new Intent(LoginActivity.this, ContentGrabberService.class);
-						ArrayList<String> urls = new ArrayList<String>();
-						urls.add(Config.JSON_URL + "/" + Config.CONTENT_JSON);
-						urls.add(Config.JSON_URL + "/" + Config.DEPARTMENT_JSON);
-						urls.add(Config.JSON_URL + "/" + Config.COURSE_JSON);
-						urls.add(Config.JSON_URL + "/" + Config.FACULTY_JSON);
-						urls.add(Config.JSON_URL + "/" + Config.POSITION_JSON);
-						urls.add(Config.JSON_URL + "/" + Config.SSG_JSON);
-						urls.add(Config.JSON_URL + "/" + Config.SEALS_JSON);
-						urls.add(Config.JSON_URL + "/" + Config.MUSIC_JSON);
-						urls.add(Config.JSON_URL + "/" + Config.OTHER_JSON);
-						
-						contentGrabber.putExtra(ContentGrabberService.PARAM_SRC, urls);
+						contentGrabber.putExtra(ContentGrabberService.PARAM_SRC, Config.getRequests());
 						startService(contentGrabber);
 						
 					} else {
@@ -277,6 +260,7 @@ public class LoginActivity extends Activity implements OnClickListener{
 		public void onReceive(Context arg0, Intent arg1) {
 			// TODO Auto-generated method stub
 			prepareDialog.dismiss();
+			Log.e("RESPONSE RECEIVER", "onReceive");
 			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 			startActivity(intent);
 			finish();

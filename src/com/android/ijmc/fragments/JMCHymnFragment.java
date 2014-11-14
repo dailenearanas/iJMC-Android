@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.android.ijmc.R;
@@ -44,6 +46,7 @@ public class JMCHymnFragment extends Fragment {
 	MediaPlayer player;
 	SeekBar seekBar;
 	Handler handler = new Handler();
+	ListView listView;
 	
 	private int lastTopValueAssigned = 0;
 	public JMCHymnFragment() {
@@ -58,7 +61,7 @@ public class JMCHymnFragment extends Fragment {
 		// TODO Auto-generated method stub
 		if(view == null){
 			view = inflater.inflate(R.layout.fragment_common_parallax, container, false);
-			ListView listView = (ListView)view.findViewById(R.id.listContent);
+			listView = (ListView)view.findViewById(R.id.listContent);
 			ViewGroup header = (ViewGroup)inflater.inflate(R.layout.fragment_jmcprofile_header, listView, false);
 			
 			/*
@@ -75,6 +78,54 @@ public class JMCHymnFragment extends Fragment {
 			LinearLayout sectionWrapper = (LinearLayout)header.findViewById(R.id.sectionWrapper);
 			View playerView = inflater.inflate(R.layout.viewgroup_musicplayer, null);
 			seekBar = (SeekBar)playerView.findViewById(R.id.seekBar1);
+			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+				
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+					Log.e("STOP - SEEKED TO", seekBar.getProgress()+"");
+					try {
+						player.reset();
+						player.setDataSource(Config.EXTERNAL_FOLDER + "/music_file/" + Config.MUSIC_FILENAME);
+						player.setOnPreparedListener(new OnPreparedListener() {
+							
+							@Override
+							public void onPrepared(MediaPlayer mp) {
+								// TODO Auto-generated method stub
+								mp.seekTo(JMCHymnFragment.this.seekBar.getProgress());
+								mp.start();
+							}
+						});
+						player.prepare();
+					} catch (IllegalStateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+					// TODO Auto-generated method stub
+					Log.e("START SEEK", seekBar.getProgress()+"");
+					if(player.isPlaying()) {
+						player.pause();
+					}
+				}
+				
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress,
+						boolean fromUser) {
+					// TODO Auto-generated method stub
+					if(fromUser) {
+						player.seekTo(progress);
+					}
+					Log.e("SEEK PROGRESS", progress+"");
+				}
+			});
+			
 			Button playBtn = (Button)playerView.findViewById(R.id.button1);			
 			playBtn.setOnClickListener(new OnClickListener() {
 				
@@ -90,6 +141,8 @@ public class JMCHymnFragment extends Fragment {
 						player.stop();
 						player.reset();
 					} else {
+						//125 is point of reference for top allowance pixel at point listview.firstChild.getTop();
+						listView.smoothScrollBy(listView.getChildAt(1).getTop()-125, 2000);
 						v.setBackgroundResource(R.drawable.stop);
 						v.invalidate();
 						try {
@@ -108,6 +161,7 @@ public class JMCHymnFragment extends Fragment {
 								@Override
 								public void onPrepared(MediaPlayer mp) {
 									// TODO Auto-generated method stub
+									Log.e("MUSIC LENGTH", player.getDuration()+"");
 									seekBar.setMax(player.getDuration());
 									updateSeekBar();
 									mp.start();

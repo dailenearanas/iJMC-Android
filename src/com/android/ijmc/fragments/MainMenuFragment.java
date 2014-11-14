@@ -123,7 +123,6 @@ public class MainMenuFragment extends Fragment{
 						imageView.setImageResource(R.drawable.ssg);
 						subView.setBackgroundColor(Color.parseColor("#ff4e8e"));
 						imageView.setOnClickListener(new OnClickListener() {
-							
 							@Override
 							public void onClick(View v) {
 								// TODO Auto-generated method stub

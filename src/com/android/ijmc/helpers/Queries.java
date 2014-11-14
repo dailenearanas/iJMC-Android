@@ -670,6 +670,7 @@ public class Queries {
 
 		sqLiteDB.insert(DatabaseHandler.sealTbl, null, values);
 		sqLiteDB.close();
+		dbHandler.close();
 	}
 
 	public static void InsertMusic(SQLiteDatabase sqLiteDB,
@@ -764,5 +765,6 @@ public class Queries {
 				+ "o_title TEXT, " + "o_body TEXT, " + "user_id INTEGER ) ");
 
 		db.close();
+		dbHandler.close();
 	}
 }

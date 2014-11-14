@@ -3,10 +3,9 @@ package com.android.ijmc;
 import java.io.File;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -34,6 +33,8 @@ public class MainActivity extends ActionBarActivity implements
 	private CharSequence mTitle;
 	
 	private SharedPreferences sp;
+	
+	ProgressDialog dialog;
 	
 
 	@Override
@@ -78,9 +79,20 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
-		// update the main content by replacing fragments
-		
-		//switch item position
+		switch(position) {
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			//UPDATE MENU
+			Intent intent = new Intent(this, UpdateActivity.class);
+			startActivity(intent);
+			finish();
+			break;
+		case 3:
+			break;
+		}
 	}
 
 	public void onSectionAttached(int number) {

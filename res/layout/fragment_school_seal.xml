@@ -7,10 +7,13 @@
     
     <ListView
         android:id="@+id/sealList"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:cacheColorHint="#FFFFFF00"
-        android:animationCache="false"
+	    android:layout_height="match_parent"
+	    android:animationCache="false"
+	    android:scrollingCache="false"
+	    android:divider="#FFFFFF00"
+	    android:dividerHeight="0dp"
+	    android:scrollbars="none"
         />
 
 </LinearLayout>
