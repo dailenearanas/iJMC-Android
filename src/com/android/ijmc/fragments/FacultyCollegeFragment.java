@@ -72,7 +72,7 @@ public class FacultyCollegeFragment extends Fragment{
 				
 				FacultyModel model = faculties.get(position);
 				
-				View dialogView = Utilities.createViewForFacultyInformation(FacultyCollegeFragment.this.inflater, model, position);
+				View dialogView = Utilities.createViewForFacultyInformation(FacultyCollegeFragment.this.inflater, model);
 				
 				dialog.setView(dialogView);
 				dialog.show();

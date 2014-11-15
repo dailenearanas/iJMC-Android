@@ -236,15 +236,17 @@ public class Queries {
 	}
 
 	/**
-	 * Queries items from the database that contains the information of every faculty registered on the database.
-	 * this requires instances of SQLiteDatabase, DatabaseHandler, tag (faculty department).
+	 * Queries items from the database that contains the information of every
+	 * faculty registered on the database. this requires instances of
+	 * SQLiteDatabase, DatabaseHandler, tag (faculty department).
+	 * 
 	 * @param sqliteDB
 	 * @param dbHandler
 	 * @param tag
 	 * @return
 	 */
-	public static ArrayList<FacultyModel> getFacultyListItem(SQLiteDatabase sqliteDB,
-			DatabaseHandler dbHandler, String tag) {
+	public static ArrayList<FacultyModel> getFacultyListItem(
+			SQLiteDatabase sqliteDB, DatabaseHandler dbHandler, String tag) {
 
 		ArrayList<FacultyModel> models = new ArrayList<FacultyModel>();
 		FacultyModel facultyModel;
@@ -271,19 +273,38 @@ public class Queries {
 				facultyModel.facultySfx = mCursor.getString(5);
 				facultyModel.facultyGender = mCursor.getString(6);
 				facultyModel.facultyImagePath = mCursor.getString(7);
-				facultyModel.facultyDeptId = mCursor.getString(10)+"-"+mCursor.getString(8);
+				facultyModel.facultyDeptId = mCursor.getString(10) + "-"
+						+ mCursor.getString(8);
 				facultyModel.facultyPositionId = mCursor.getString(11);
-				
-				if(!mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school department")
-						&& !mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school department")
-						&& !mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("administration")
-						&& tag.toLowerCase(Locale.getDefault()).equals("college")) {
+
+				if (!mCursor.getString(10).toLowerCase(Locale.getDefault())
+						.equals("high school department")
+						&& !mCursor.getString(10)
+								.toLowerCase(Locale.getDefault())
+								.equals("grade school department")
+						&& !mCursor.getString(10)
+								.toLowerCase(Locale.getDefault())
+								.equals("administration")
+						&& tag.toLowerCase(Locale.getDefault()).equals(
+								"college")) {
 					models.add(facultyModel);
-				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("high school department") && tag.toLowerCase(Locale.getDefault()).equals("high school")) {
+				} else if (mCursor.getString(10)
+						.toLowerCase(Locale.getDefault())
+						.equals("high school department")
+						&& tag.toLowerCase(Locale.getDefault()).equals(
+								"high school")) {
 					models.add(facultyModel);
-				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("grade school department") && tag.toLowerCase(Locale.getDefault()).equals("grade school")) {
+				} else if (mCursor.getString(10)
+						.toLowerCase(Locale.getDefault())
+						.equals("grade school department")
+						&& tag.toLowerCase(Locale.getDefault()).equals(
+								"grade school")) {
 					models.add(facultyModel);
-				} else if(mCursor.getString(10).toLowerCase(Locale.getDefault()).equals("administration") && tag.toLowerCase(Locale.getDefault()).equals("administration")) {
+				} else if (mCursor.getString(10)
+						.toLowerCase(Locale.getDefault())
+						.equals("administration")
+						&& tag.toLowerCase(Locale.getDefault()).equals(
+								"administration")) {
 					models.add(facultyModel);
 				}
 			} while (mCursor.moveToNext());
@@ -291,14 +312,16 @@ public class Queries {
 
 		mCursor.close();
 		dbHandler.close();
-		
+
 		return models;
 	}
-	
-	public static List<String> getFacultyImages(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler){
+
+	public static List<String> getFacultyImages(SQLiteDatabase sqliteDB,
+			DatabaseHandler dbHandler) {
 		List<String> fimages = new ArrayList<String>();
 		sqliteDB = dbHandler.getReadableDatabase();
-		Cursor mCursor = sqliteDB.rawQuery("select image_path from "+DatabaseHandler.facultyTbl.toString(), null);
+		Cursor mCursor = sqliteDB.rawQuery("select image_path from "
+				+ DatabaseHandler.facultyTbl.toString(), null);
 		mCursor.moveToFirst();
 		if (!mCursor.isAfterLast()) {
 			do {
@@ -309,7 +332,7 @@ public class Queries {
 
 		mCursor.close();
 		dbHandler.close();
-		
+
 		return fimages;
 	}
 
@@ -343,23 +366,25 @@ public class Queries {
 
 		return models;
 	}
-	
-	public static List<String> getDepartmentImages(SQLiteDatabase sqliteDB, DatabaseHandler handler){
+
+	public static List<String> getDepartmentImages(SQLiteDatabase sqliteDB,
+			DatabaseHandler handler) {
 		List<String> deptImages = new ArrayList<String>();
-		String rawQuery = "SELECT img_path FROM " + DatabaseHandler.departmentsTbl;
-		//SOMETHING's WRONG WITH THE DATABASE
+		String rawQuery = "SELECT img_path FROM "
+				+ DatabaseHandler.departmentsTbl;
+		// SOMETHING's WRONG WITH THE DATABASE
 		sqliteDB = handler.getReadableDatabase();
 		Cursor mCursor = sqliteDB.rawQuery(rawQuery, null);
 		mCursor.moveToFirst();
-		if(!mCursor.isAfterLast()) {
+		if (!mCursor.isAfterLast()) {
 			do {
 				String image_path = mCursor.getString(0);
 				deptImages.add(image_path);
-			}while(mCursor.moveToNext());
+			} while (mCursor.moveToNext());
 		}
-		
+
 		return deptImages;
-		
+
 	}
 
 	public static ArrayList<CourseModel> getCourses(SQLiteDatabase sqliteDB,
@@ -379,7 +404,7 @@ public class Queries {
 				courseModel.courseId = mCursor.getString(1);
 				courseModel.courseTitle = mCursor.getString(2);
 				courseModel.courseDesc = mCursor.getString(3);
-				courseModel.deptId = mCursor.getInt(4);
+				courseModel.deptId = mCursor.getString(4);
 
 				models.add(courseModel);
 
@@ -439,8 +464,9 @@ public class Queries {
 				ssgModel.ssgLname = mCursor.getString(3);
 				ssgModel.ssgImage = mCursor.getString(4);
 				ssgModel.ssgLevel = mCursor.getString(5);
-				ssgModel.ssgCrsId = mCursor.getInt(6);
-				ssgModel.ssgPosId = mCursor.getInt(7);
+				ssgModel.ssgCrsId = mCursor.getInt(6) + "";
+				ssgModel.ssgDeptId = mCursor.getInt(7) + "";
+				ssgModel.ssgPosId = mCursor.getInt(8) + "";
 
 				models.add(ssgModel);
 
@@ -451,6 +477,67 @@ public class Queries {
 		dbHandler.close();
 
 		return models;
+	}
+
+	public static ArrayList<SSGModel> getSSGListItems(SQLiteDatabase sqliteDB,
+			DatabaseHandler handler) {
+
+		ArrayList<SSGModel> ssgitems = new ArrayList<SSGModel>();
+		SSGModel ssgModel;
+
+		sqliteDB = handler.getReadableDatabase();
+		Cursor mCursor = sqliteDB.rawQuery(
+				"select s.firstname,s.middlename,s.lastname,s.img_path,s.level, d.dept_title, p.pos_title, (select c.crs_desc from "
+						+ DatabaseHandler.courseTbl
+						+ " as c where c.id = s.crs_id) as crs FROM "
+						+ DatabaseHandler.ssgTbl + " as s  inner join "
+						+ DatabaseHandler.departmentsTbl
+						+ " as d on s.dept_id = d.id inner join "
+						+ DatabaseHandler.positionTbl
+						+ " as p on s.pos_id = p.id", null);
+
+		mCursor.moveToFirst();
+		if (!mCursor.isAfterLast()) {
+			do {
+				ssgModel = new SSGModel();
+
+				ssgModel.ssgFname = mCursor.getString(0);
+				ssgModel.ssgMname = mCursor.getString(1);
+				ssgModel.ssgLname = mCursor.getString(2);
+				ssgModel.ssgImage = mCursor.getString(3);
+				ssgModel.ssgLevel = mCursor.getString(4);
+				ssgModel.ssgDeptId = mCursor.getString(5);
+				ssgModel.ssgPosId = mCursor.getString(6);
+				ssgModel.ssgCrsId = mCursor.getString(7);
+				ssgitems.add(ssgModel);
+
+			} while (mCursor.moveToNext());
+		}
+
+		sqliteDB.close();
+		handler.close();
+
+		return ssgitems;
+
+	}
+	
+	public static List<String> getSSGImages(SQLiteDatabase sqliteDB,
+			DatabaseHandler handler) {
+		List<String> deptImages = new ArrayList<String>();
+		String rawQuery = "SELECT img_path FROM "
+				+ DatabaseHandler.ssgTbl;
+		sqliteDB = handler.getReadableDatabase();
+		Cursor mCursor = sqliteDB.rawQuery(rawQuery, null);
+		mCursor.moveToFirst();
+		if (!mCursor.isAfterLast()) {
+			do {
+				String image_path = mCursor.getString(0);
+				deptImages.add(image_path);
+			} while (mCursor.moveToNext());
+		}
+
+		return deptImages;
+
 	}
 
 	public static ArrayList<SealsModel> getSeals(SQLiteDatabase sqliteDB,
@@ -481,10 +568,13 @@ public class Queries {
 
 		return models;
 	}
-	public static List<String> getSealImagePath(SQLiteDatabase sqliteDB, DatabaseHandler dbHandler){
+
+	public static List<String> getSealImagePath(SQLiteDatabase sqliteDB,
+			DatabaseHandler dbHandler) {
 		List<String> simages = new ArrayList<String>();
 		sqliteDB = dbHandler.getReadableDatabase();
-		Cursor mCursor = sqliteDB.rawQuery("select img_path from "+DatabaseHandler.sealTbl.toString(), null);
+		Cursor mCursor = sqliteDB.rawQuery("select img_path from "
+				+ DatabaseHandler.sealTbl.toString(), null);
 		mCursor.moveToFirst();
 		if (!mCursor.isAfterLast()) {
 			do {
@@ -495,7 +585,7 @@ public class Queries {
 
 		mCursor.close();
 		dbHandler.close();
-		
+
 		return simages;
 	}
 
@@ -625,6 +715,7 @@ public class Queries {
 		values.put("crs_id", course.getCourseId());
 		values.put("crs_title", course.getCourseTitle());
 		values.put("crs_desc", course.getCourseDesc());
+		values.put("dept_id", course.getDeptId());
 
 		sqLiteDB.insert(DatabaseHandler.courseTbl, null, values);
 		sqLiteDB.close();
@@ -652,6 +743,7 @@ public class Queries {
 		values.put("lastname", ssg.getSsgLname());
 		values.put("img_path", ssg.getSsgImage());
 		values.put("level", ssg.getSsgLevel());
+		values.put("dept_id", ssg.getSsgDeptId());
 		values.put("crs_id", ssg.getSsgCrsId());
 		values.put("pos_id", ssg.getSsgPosId());
 

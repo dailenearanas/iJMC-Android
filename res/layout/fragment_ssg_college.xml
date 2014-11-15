@@ -3,7 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FF0000" >
+    android:background="#FFFFFF" >
     
+    <ListView
+        android:id="@+id/ssgOfficerList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animationCache="false"
+	    android:scrollingCache="false"
+	    android:divider="#FFFFFF00"
+	    android:dividerHeight="0dp"
+	    android:scrollbars="none" />
 
 </LinearLayout>

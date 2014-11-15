@@ -69,7 +69,7 @@ public class AdministrationFragment extends Fragment{
 				
 				FacultyModel model = faculties.get(position);
 				
-				View dialogView = Utilities.createViewForFacultyInformation(AdministrationFragment.this.inflater, model, position);
+				View dialogView = Utilities.createViewForFacultyInformation(AdministrationFragment.this.inflater, model);
 				
 				dialog.setView(dialogView);
 				dialog.show();

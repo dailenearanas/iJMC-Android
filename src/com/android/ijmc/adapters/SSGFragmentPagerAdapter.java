@@ -5,12 +5,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.android.ijmc.fragments.SSGCollegeFragment;
-import com.android.ijmc.fragments.SSGGradeSchoolFragment;
 import com.android.ijmc.fragments.SSGHighSchoolFragment;
 
 public class SSGFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
-	private static int PAGES = 3;
+	private static int PAGES = 2;
 
 	public SSGFragmentPagerAdapter(FragmentManager fragmentManager) {
 		super(fragmentManager);
@@ -23,8 +22,6 @@ public class SSGFragmentPagerAdapter extends FragmentStatePagerAdapter {
 			return SSGCollegeFragment.newInstance();
 		case 1:
 			return SSGHighSchoolFragment.newInstance();
-		case 2:
-			return SSGGradeSchoolFragment.newInstance();
 		default:
 			return null;
 		}

@@ -14,7 +14,7 @@ public class Config {
     
     public static String HOST_NAME = "http://192.168.56.1";
     
-    public static String FOLDER_NAME = "ijmc3";
+    public static String FOLDER_NAME = "ijmc4";
     
     public static String BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public";
     
@@ -30,6 +30,8 @@ public class Config {
     
     public static String IMAGE_SEAL_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/jmcseal_image";
     
+    public static String IMAGE_SSG_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/ssg_officers";
+    
     public static String MUSIC_BASE_URL = HOST_NAME + "/" + FOLDER_NAME + "/public/music_files";
     
     public static String EXTERNAL_FOLDER = Environment.getExternalStorageDirectory() + "/.ijmc";
@@ -37,6 +39,8 @@ public class Config {
     public static String EXTERNAL_FOLDER_DEPT_IMAGE = "dept_image";
     
     public static String EXTERNAL_FOLDER_FACULTY_IMAGE = "faculty_image";
+    
+    public static String EXTERNAL_FOLDER_SSG_IMAGE = "ssg_officers";
     
     public static String EXTERNAL_FOLDER_MUSIC = "music_file";
     
@@ -190,6 +194,8 @@ public class Config {
     public static final String TAG_SSG_LEVEL = "level";
     
     public static final String TAG_SSG_CRS_ID = "crs_id";
+    
+    public static final String TAG_SSG_DEPT_ID = "dept_id";
     
     public static final String TAG_SSG_POS_ID = "pos_id";
     

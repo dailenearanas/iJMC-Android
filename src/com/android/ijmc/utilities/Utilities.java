@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.android.ijmc.R;
 import com.android.ijmc.config.Config;
 import com.android.ijmc.models.FacultyModel;
+import com.android.ijmc.models.SSGModel;
 
 public class Utilities {
 	
@@ -137,7 +138,7 @@ public class Utilities {
 		return contextView;
 	}
 	
-	public static View createViewForFacultyInformation(LayoutInflater inflater, FacultyModel model, int position) {
+	public static View createViewForFacultyInformation(LayoutInflater inflater, FacultyModel model) {
 		
 		View view = inflater.inflate(R.layout.faculty_single_item_view, null);
 		
@@ -157,6 +158,30 @@ public class Utilities {
 		facultyId.setText(model.getFacultyId());
 		facultyDept.setText(model.getFacultyDeptId().substring(0, model.getFacultyDeptId().lastIndexOf('-')));
 		facultyPosition.setText(model.getFacultyPositionId());
+		
+		return view;
+	}
+	
+	public static View createViewForSSGInformation(LayoutInflater inflater, SSGModel model) {
+		
+		View view = inflater.inflate(R.layout.faculty_single_item_view, null);
+		
+		ImageView facultyBadge = (ImageView)view.findViewById(R.id.facultyBadge);
+		TextView facultyName = (TextView)view.findViewById(R.id.fcltyName);
+		TextView facultyId = (TextView)view.findViewById(R.id.idNum);
+		facultyId.setVisibility(View.GONE);
+		TextView facultyDept = (TextView)view.findViewById(R.id.fcltyDept);
+		TextView facultyPosition = (TextView)view.findViewById(R.id.fcltyPosition);
+		
+		File imageName = new File(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_SSG_IMAGE + "/" + model.getSsgImage());
+		Bitmap bmp = BitmapFactory.decodeFile(imageName.getAbsolutePath());
+		if(bmp == null) {
+			bmp = BitmapFactory.decodeFile(Config.EXTERNAL_FOLDER + "/" + Config.EXTERNAL_FOLDER_SSG_IMAGE + "/user.png");
+		}
+		facultyBadge.setImageBitmap(Utilities.getRoundedRectBitmap(bmp, 256));
+		facultyName.setText(model.getSsgFname() + " " + model.getSsgMname() + " " + model.getSsgLname());
+		facultyDept.setText(model.getSsgDeptId());
+		facultyPosition.setText(model.getSsgPosId());
 		
 		return view;
 	}

@@ -73,7 +73,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "crs_id INTEGER, " +
                 "crs_title TEXT, " +
                 "crs_desc TEXT, " +               
-                "dept_id INTEGER ) ");
+                "dept_id TEXT ) ");
         
         db.execSQL("CREATE TABLE IF NOT EXISTS "+ positionTbl +" " +
                 "( id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -87,6 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 "lastname TEXT, " +
                 "img_path TEXT, " +
                 "level TEXT, " +  
+                "dept_id INTEGER, " +
                 "crs_id INTEGER, " +             
                 "pos_id INTEGER ) ");
         

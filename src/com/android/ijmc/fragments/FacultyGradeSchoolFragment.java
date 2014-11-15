@@ -69,7 +69,7 @@ public class FacultyGradeSchoolFragment extends Fragment {
 				dialog.setIcon(android.R.drawable.ic_dialog_info);
 				
 				FacultyModel model = faculties.get(position);
-				View dialogView = Utilities.createViewForFacultyInformation(FacultyGradeSchoolFragment.this.inflater, model, position);
+				View dialogView = Utilities.createViewForFacultyInformation(FacultyGradeSchoolFragment.this.inflater, model);
 				
 				dialog.setView(dialogView);
 				dialog.show();

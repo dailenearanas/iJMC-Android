@@ -81,6 +81,7 @@ public class ContentGrabberService extends IntentService {
 					Config.SSG_JSON.length() - 5))) {
 				Log.e("ContentGrabberService","SSG");
 				forSSG(response);
+				obtainSSGImages();
 			} else if (sourceFile.equals(Config.SEALS_JSON.substring(0,
 					Config.SEALS_JSON.length() - 5))) {
 				Log.e("ContentGrabberService","Seals");
@@ -210,7 +211,7 @@ public class ContentGrabberService extends IntentService {
 				course.courseId = obj.getString(Config.TAG_COURSE_ID);
 				course.courseTitle = obj.getString(Config.TAG_COURSE_TITLE);
 				course.courseDesc = obj.getString(Config.TAG_COURSE_DESC);
-				course.deptId = obj.getInt(Config.TAG_COURSE_DEPT_ID);
+				course.deptId = obj.getString(Config.TAG_COURSE_DEPT_ID);
 				Queries.InsertCourse(sqliteDB, handler, course);
 			}
 		} catch (Exception e) {
@@ -325,19 +326,52 @@ public class ContentGrabberService extends IntentService {
 				ssg.ssgLname = obj.getString(Config.TAG_SSG_LNAME);
 				ssg.ssgImage = obj.getString(Config.TAG_SSG_IMAGE);
 				ssg.ssgLevel = obj.getString(Config.TAG_SSG_LEVEL);
-				ssg.ssgCrsId = obj.getInt(Config.TAG_SSG_CRS_ID);
-				ssg.ssgPosId = obj.getInt(Config.TAG_SSG_POS_ID);
+				ssg.ssgDeptId = obj.getInt(Config.TAG_SSG_DEPT_ID)+"";
+				ssg.ssgCrsId = obj.getInt(Config.TAG_SSG_CRS_ID)+"";
+				ssg.ssgPosId = obj.getInt(Config.TAG_SSG_POS_ID)+"";
 
 				Queries.InsertSSG(sqliteDB, handler, ssg);
 			}
 
-			ArrayList<SSGModel> ssg = Queries.getSSG(sqliteDB, handler);
-			for (SSGModel item : ssg) {
-				Log.e("SSG", item.getSsgLname());
-			}
 		} catch (Exception e) {
 			Log.e(ContentGrabberService.class.toString(), e.getMessage()
 					.toString());
+		}
+	}
+	
+	private void obtainSSGImages() {
+		DatabaseHandler handler = new DatabaseHandler(
+				this.getApplicationContext());
+		SQLiteDatabase sqliteDB = handler.getReadableDatabase();
+		List<String> simages = Queries.getSSGImages(sqliteDB, handler);
+		for (String image : simages) {
+			try {
+				int count = 0;
+				String urlImage = image.replace(" ", "%20");
+				URL url = new URL(Config.IMAGE_SSG_BASE_URL + "/" + urlImage);
+
+				URLConnection connection = url.openConnection();
+				connection.connect();
+
+				InputStream in = new BufferedInputStream(url.openStream());
+
+				File imageDir = new File(Config.EXTERNAL_FOLDER
+						+ "/" + Config.EXTERNAL_FOLDER_SSG_IMAGE);
+				imageDir.mkdirs();
+
+				OutputStream out = new FileOutputStream(Config.EXTERNAL_FOLDER
+						+ "/" + Config.EXTERNAL_FOLDER_SSG_IMAGE + "/" + image);
+				byte[] data = new byte[1024];
+				while ((count = in.read(data)) != -1) {
+					out.write(data, 0, count);
+				}
+				out.flush();
+				out.close();
+				in.close();
+
+			} catch (IOException e) {
+				Log.e("SEAL IMAGES DOWNLOAD ERROR", e.getMessage().toString());
+			}
 		}
 	}
 
